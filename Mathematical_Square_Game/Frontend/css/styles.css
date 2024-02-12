@@ -1,0 +1,11 @@
+.app
+{
+    position: absolute;
+}
+
+.main-window-game
+{
+    width: 200;
+    height: 200;
+    background-color: blue;
+}
