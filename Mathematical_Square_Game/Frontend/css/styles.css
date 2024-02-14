@@ -1,4 +1,5 @@
 html, body{
+    display: flex;
     width: 100%;
     height: 100%;
 }
@@ -19,13 +20,14 @@ html, body{
 
 .toolbar
 {
-    background-color: #37bc9d;
-    width: 100%;
+    background-color:#37bc9d;
+    width: 90%;
     height: 5%;
     display: flex;
     flex-direction: row;
     margin-left: 10%;
-    position: sticky;
+    margin: auto;
+    border-radius: 15px;
 }
 
 .game-window
@@ -36,21 +38,35 @@ html, body{
     width: 90%;
     height: 100%;
     display: flex;
-    border-radius: 15px;
-    position:sticky;
+    border-radius: 5px;
+    position: sticky;
 }
 
 
 .button-toolbar
 {
-    background-color: #37bc9d;
     display: inline-flex;
     align-items: center;
+    color: #fff;
     justify-content: center;
-    font-size: 15px;
+    font-size: 0.8vw;
     font-weight: 500;
-    border-radius: 15px;
+    border-radius: 5px;
     border-color: white;
+    background: linear-gradient(to left,#1D976C,#93F9B9);
+    text-decoration: none;
+    background-size: 200%;
+    transition: background-position 0.5s, brightness 0.5s;
+}
+
+.button-toolbar:hover
+{
+    background-position: right;
+}
+
+.button-toolbar:active
+{
+    filter: brightness(90%)
 }
 
 .info-bar
@@ -84,11 +100,17 @@ html, body{
 .navigation-signin
 {
     width: 10%;
-    margin-left: 18.5%;
+    margin-left: 28.5%;
 }
 
 .navigation-rating
 {
     width: 10%;
     margin-left: 0.5%;
+}
+
+.Score
+{
+    text-align: center;
+    font-size: 2vw;
 }
