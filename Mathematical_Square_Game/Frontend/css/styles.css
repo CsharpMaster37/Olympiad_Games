@@ -1,11 +1,94 @@
-.app
-{
-    position: absolute;
+html, body{
+    width: 100%;
+    height: 100%;
 }
 
-.main-window-game
+.main-window
 {
-    width: 200;
-    height: 200;
-    background-color: blue;
+    background-color: #37bc9d;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5px;
+    position: fixed;
+}
+
+
+.toolbar
+{
+    background-color: #37bc9d;
+    width: 100%;
+    height: 5%;
+    display: flex;
+    flex-direction: row;
+    margin-left: 10%;
+    position: sticky;
+}
+
+.game-window
+{
+    margin-bottom: 0.5%;
+    margin-top: 0.5%;
+    background-color: white;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    border-radius: 15px;
+    position:sticky;
+}
+
+
+.button-toolbar
+{
+    background-color: #37bc9d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 15px;
+    border-color: white;
+}
+
+.info-bar
+{
+    background-color: whitesmoke;
+    border-bottom: 1px solid gray;
+    width: 100%;
+    height: 7%;
+    position: absolute;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.navigation-main-page
+{
+    width: 10%;
+}
+
+.navigation-math-square
+{
+    width: 20%;
+    margin-left: 0.5%;
+}
+
+.navigation-math-carousel
+{
+    width: 20%;
+    margin-left: 0.5%;
+}
+
+.navigation-signin
+{
+    width: 10%;
+    margin-left: 18.5%;
+}
+
+.navigation-rating
+{
+    width: 10%;
+    margin-left: 0.5%;
 }
