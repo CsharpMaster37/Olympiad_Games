@@ -1,0 +1,43 @@
+@media screen and (max-width: 1000px) {
+    .info-window p {
+      font-size: 20px;
+    }
+  }
+  @media screen and (max-width: 576px) {
+    .info-window p {
+      font-size: 10px;
+    }
+  }
+
+.info-window{
+    background-color: #11998e;
+    height: 100%;
+    display: flex;
+    border-radius: 3px;
+    border: 2px solid green;
+}
+
+.info-window p{
+    color: #FACD3D;
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.score-box{
+    vertical-align: bottom;
+    margin-left: 5%;
+    margin-top: 10%;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+}
+
+.count-in-score
+{
+    display: inline-flex;
+}
+
+.count-value
+{
+    margin-left: 5%;
+}

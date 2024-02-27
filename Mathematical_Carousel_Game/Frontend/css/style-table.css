@@ -1,0 +1,114 @@
+.progress-table{
+    margin: 1%;
+    color: black;
+    border: 1px solid black;
+    height: 20%;
+    width: 100%;
+    table-layout: auto;
+    word-wrap: break-word;
+}   
+
+.progress-table th, td{
+    border: 1px solid black; 
+    height: 10%;      
+    overflow-wrap: break-word;
+    text-align: center;
+}
+
+
+.Game{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items:start;
+}
+
+.wrapper-question{
+    align-self: center;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 10%;
+}
+
+.number-th-1{
+    background-color: green;
+}
+
+.number-th-2{
+    background-color: red;
+}
+
+.wrapper-progress-table{
+    overflow-x: auto;
+    display: flex;
+    width: 95%;
+    align-self: center;
+    margin-top: 5%;
+}
+
+.form-answer{
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    align-self: center;
+}
+
+.button-form-answer{
+    border: 1px solid green;
+    color:#fff;
+    background: linear-gradient(to left, #a8ff78,#78ffd6,#a8ff78);
+    text-decoration: none;
+    border-radius: 5px;
+    background-size: 200%;
+    transition: .5s;
+    margin-left: 15%;
+    height: 50%;
+    align-self: flex-start;
+    text-align: center;
+    font-size: 100%;
+    margin-top: 1%;
+}
+
+#label-question{
+    font-size: 50px;
+    font-weight: 500;
+    align-self: center;
+    color: black;
+}
+
+#input-answer{
+    width: 70%;
+    align-self: center;
+    margin-top: 2%;
+    background-color: rgba(0,0,0,0.1);
+    color: white;  
+    height: 100%;  
+    font-size: 25px;
+}
+
+#input-answer::placeholder {
+    color: white;
+}
+
+input,input:focus,input:invalid {
+    border: none; 
+    outline: none;
+}
+
+div::-webkit-scrollbar {
+    width: 1px; /* Ширина полосы прокрутки */
+}
+
+/* Стилизация ползунка */
+div::-webkit-scrollbar-thumb {
+    background-color: #bbbbbb; /* Цвет ползунка */
+    border-radius: 5px; /* Скругление углов ползунка */
+}
+
+/* Стилизация трека (бэкграунда) полосы прокрутки */
+div::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 5px;
+}
