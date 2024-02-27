@@ -1,0 +1,62 @@
+@media screen and (max-width: 875px) {
+    .Square-table td{
+        font-size: 10px;
+    }
+  }
+  @media screen and (min-width: 876px) {
+    .Square-table td{
+        font-size: 15px;
+    }
+  }
+
+.Square-table {
+    color: #FACD3D;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    border-collapse: separate;
+    border-spacing: 5px;
+    table-layout: fixed;
+  }
+
+  .Square-table td,th{
+    text-align: center;
+    overflow-wrap: break-word;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 0 2px darkslategray;
+}   
+.Square-table td{
+    height: 20%;
+}
+
+
+.Question{
+    width: 100%;
+    height: 100%;
+    color: white;
+    background: linear-gradient(to left, #facd3d,#d2c680,#94bbe9);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px darkslategray;
+    transition: .5s;
+    background-size: 200%;
+}
+
+
+.Square-table .Question:hover
+{
+    background-position: right;
+    color: black;
+}
+
+
+.Game{
+    background-color:#11998e;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
