@@ -84,7 +84,7 @@
               <div class="score-box">
                 <div class="count-in-score">
                   <p>Баллы:</p>
-                  <p class="count-value">0</p>
+                  <p id = "count-value" class="count-value">0</p>
                 </div>
               </div>
             </div>
@@ -92,23 +92,20 @@
         <div class="col-sm-10">
           <div class="Game">
             <div class="wrapper-progress-table"> 
-              <table class="progress-table">
-                <col width="70px" />
-                <tr id="header-row">
-                  <th>№</th>
-                    <!-- JavaScript будет использован для добавления названий от 1 до 100 -->
-                </tr>
-                <tr id="empty-row">
-                  <th>Цена</th>
-                  <!-- JavaScript будет использован для добавления 100 пустых ячеек -->
-                </tr>
+              <table id="progress-table">
+                <tbody>
+                  <tr>
+                    <th>№</th>
+                    <th>Цена</th>
+                  </tr>
+                </tbody>                
               </table>              
             </div>  
             <div class="wrapper-question">
               <label id = "label-question" for="input-answer">Вопрос?</label>
               <form class="form-answer">
                 <input type="text" id="input-answer" name="input-answer" placeholder="Введите ответ!"/>
-                <input id = "button-form-answer" class = "button-form-answer" type="submit" value="Следующий вопрос" />
+                <input id = "button-form-answer" class = "button-form-answer" type="button" value="Следующий вопрос" />
               </form>
             </div>          
           </div>
