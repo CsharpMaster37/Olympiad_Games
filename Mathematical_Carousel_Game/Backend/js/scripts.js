@@ -101,6 +101,7 @@ document.getElementById('button-form-answer').addEventListener('click', function
     if (inputAnswer.value == questions[idxQuestion].answer) {
         total_score.innerText = Number(total_score.innerText) + score_current_question
         score_current_question += score_success
+        table.rows[idxQuestion + 1].cells[0].style.backgroundColor = "green"
     }
     else {
         if (score_current_question - score_failure <= score_first_question) {
@@ -109,6 +110,7 @@ document.getElementById('button-form-answer').addEventListener('click', function
         else {
             score_current_question -= score_failure
         }
+        table.rows[idxQuestion + 1].cells[0].style.backgroundColor = "red"
     }
     inputAnswer.value = ''
     if (idxQuestion == total_questions - 1) {
