@@ -1,0 +1,28 @@
+{
+  "name": "olimpiad_game_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Server.js",
+  "scripts": {
+    "dev": "nodemon Server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CsharpMaster37/Olympiad_Games.git"
+  },
+  "author": "Mikhail Udalov and Maksim Perfilov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CsharpMaster37/Olympiad_Games/issues"
+  },
+  "homepage": "https://github.com/CsharpMaster37/Olympiad_Games#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.3"
+  }
+}
