@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const PORT = 3000
 
+const db = require('../Database/db')
+
 const path = require('path')
 
 const createPath = (page) => path.resolve(__dirname, '../', `${page}.html`)
@@ -12,6 +14,7 @@ app.listen(PORT, (error) => {
 
 app.use(express.static('../Mathematical_Carousel_Game/Frontend'))
 app.use(express.static('../Mathematical_Square_Game/Frontend'))
+app.use(express.static('../Registration_Page/Frontend'))
 app.use(express.static('../'))
 
 app.get('/', (req, res) => {
@@ -26,10 +29,6 @@ app.get('/carousel', (req, res) => {
     res.sendFile(createPath('Mathematical_Carousel_Game/Frontend/html/index_MathematicalCarousel'))
 })
 
-
-
-
-/* app.use((req, res) => {
-    res
-        .status(404)
-}) */
+app.get('/signup', (req, res) => {
+    res.sendFile(createPath('Registration_Page/Frontend/html/registration'))
+})
