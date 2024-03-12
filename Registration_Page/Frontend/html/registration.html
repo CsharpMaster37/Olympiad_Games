@@ -61,20 +61,20 @@
           <main class="main">
             <div class="wrapper-main">
                 <div class="signup-window">
-                    <form action="" class="user-data">
+                    <form action="/signup" class="user-data" method="post">
                         <div class="data-login">
-                            <label id = "label-username" for="input-username">Имя пользователя</label>
-                            <input type="text" id="input-username" name="input-username" placeholder="Например, Студент1"/>
+                            <label id = "label-username" class="data-label" for="input-username">Имя пользователя</label>
+                            <input type="text" id="input-username" class="data-input" name="username" placeholder="Например, Студент1"/>
                         </div>
                         <div class="data-password">
-                            <label id = "label-password" for="input-password">Пароль</label>
-                            <input type="password" id="input-password" name="input-password" placeholder="Например, qwerty123"/>
+                            <label id = "label-password" class="data-label" for="input-password">Пароль</label>
+                            <input type="password" class="data-input" id="input-password" name="password" placeholder="Например, qwerty123"/>
                         </div>
                         <div class="repeat-data-password">
-                            <label id = "label-repeat-password" for="input-repeat-password">Повторите пароль</label>
-                            <input type="password" id="input-repeat-password" name="input-repeat-password" placeholder="Например, qwerty123"/>
+                            <label id = "label-repeat-password" class="data-label" for="input-repeat-password">Повторите пароль</label>
+                            <input type="password" class="data-input" id="input-repeat-password" name="repeatpassword" placeholder="Например, qwerty123"/>
                         </div>
-                        <input id ="button-form-data" class = "button-form-data" type="submit" value="Зарегистрироваться"/>
+                        <input id ="button-form-data" class="data-input" class = "button-form-data" type="submit" value="Зарегистрироваться"/>
                     </form>
                 </div>
             </div>

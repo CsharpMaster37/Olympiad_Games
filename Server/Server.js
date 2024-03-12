@@ -1,8 +1,7 @@
 const express = require('express')
 const app = express()
 const PORT = 3000
-
-const db = require('../Database/db')
+const User = require('../Database/db')
 
 const path = require('path')
 
@@ -16,6 +15,8 @@ app.use(express.static('../Mathematical_Carousel_Game/Frontend'))
 app.use(express.static('../Mathematical_Square_Game/Frontend'))
 app.use(express.static('../Registration_Page/Frontend'))
 app.use(express.static('../'))
+
+app.use(express.urlencoded({extended: false}))
 
 app.get('/', (req, res) => {
     res.sendFile(createPath('Main_Page/Frontend/html/index'))
@@ -31,4 +32,13 @@ app.get('/carousel', (req, res) => {
 
 app.get('/signup', (req, res) => {
     res.sendFile(createPath('Registration_Page/Frontend/html/registration'))
+})
+
+app.post('/signup', (req, res) => {
+    const {username, password, repeatpassword} = req.body
+    const user = new User({username, password})
+    user
+        .save()
+        .then((result) => res.send(result))
+        .catch((error) => console.log(error))
 })

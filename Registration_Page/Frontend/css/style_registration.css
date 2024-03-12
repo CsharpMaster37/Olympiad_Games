@@ -44,48 +44,52 @@ main.main{
     display: flex;
     background-color: white;
     width: 35%;
-    height: 50%;
+    height: 70%;
     border-radius: 10px;    
 }
 
 .user-data{
     display: flex;
-    width: 100%;
+    width: 80%;
     height: 90%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: auto;
+    flex: 0 1 auto;
 }
 
 .user-data div{
     display: flex;
     flex-direction: column;
-    width: 60%;
-    height: 100%;
+    width: 80%;
+    height: 20%;
     border-radius: 5px;
     margin: 2%;
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    justify-content: center;
 }
 
-.data-login{
-    
+.data-label{
+    height: 20%;
+    width: auto;
+    margin-bottom: 2%;
+    display: flex;
+    flex: 0 1 auto;
 }
 
-.data-password{
-
-}
-
-#input-username, #input-password, #input-repeat-password{
+.data-input{
     background-color: white;
-    height: 70%;
     border-radius: 5px;
+    height: 50%;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 #button-form-data{
     background-color: green;
     border-radius: 5px;
-    height: 60%;
+    height: 10%;
     width: 50%;
 }
