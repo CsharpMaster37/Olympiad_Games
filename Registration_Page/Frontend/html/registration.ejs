@@ -11,25 +11,34 @@
         <%- include('../../../Common_Elements/html/header.ejs') %>
 
         <main class="main">
-        <div class="wrapper-main">
+        <!-- <div class="wrapper-main">
             <div class="signup-window">
                 <form action="/signup" class="user-data" method="post">
-                    <div class="data-login">
-                        <label id = "label-username" class="data-label" for="input-username">Имя пользователя</label>
+                    <label id = "label-username" class="data-label" for="input-username">Имя пользователя</label>
+                    <div class="data-login">                        
                         <input type="text" id="input-username" class="data-input" name="username" placeholder="Например, Студент1"/>
                     </div>
-                    <div class="data-password">
-                        <label id = "label-password" class="data-label" for="input-password">Пароль</label>
+                    <label id = "label-password" class="data-label" for="input-password">Пароль</label>
+                    <div class="data-password">                        
                         <input type="password" class="data-input" id="input-password" name="password" placeholder="Например, qwerty123"/>
                     </div>
-                    <div class="repeat-data-password">
-                        <label id = "label-repeat-password" class="data-label" for="input-repeat-password">Повторите пароль</label>
+                    <label id = "label-repeat-password" class="data-label" for="input-repeat-password">Повторите пароль</label>
+                    <div class="repeat-data-password">                        
                         <input type="password" class="data-input" id="input-repeat-password" name="repeatpassword" placeholder="Например, qwerty123"/>
                     </div>
                     <input id ="button-form-data" class="data-input" class = "button-form-data" type="submit" value="Зарегистрироваться"/>
                 </form>
             </div>
-        </div>
+        </div> -->
+            <form action="/signup" method="post">
+                <h2>Регистрация</h2>
+                <input type="text" name="username" placeholder="Имя пользователя" required>
+                <input type="password" name="password" placeholder="Пароль" required>
+                <input type="password" name="confirm_password" placeholder="Подтвердите пароль" required>
+                <input type="submit" value="Зарегистрироваться">
+                <p>Уже зарегистрированы? <a href="#">Войти</a></p>
+            </form>
+            
         </main>
 
         <%- include('../../../Common_Elements/html/footer.ejs') %>
