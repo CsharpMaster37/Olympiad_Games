@@ -14,6 +14,7 @@ app.listen(PORT, (error) => {
 app.use(express.static('../Mathematical_Carousel_Game/Frontend'))
 app.use(express.static('../Mathematical_Square_Game/Frontend'))
 app.use(express.static('../Registration_Page/Frontend'))
+app.use(express.static('../Login_Page/Frontend'))
 app.use(express.static('../'))
 
 app.use(express.urlencoded({ extended: false }))
@@ -32,6 +33,10 @@ app.get('/carousel', (req, res) => {
 
 app.get('/signup', (req, res) => {
     res.render(createPath('Registration_Page/Frontend/html/registration'))
+})
+
+app.get('/signin', (req, res) => {
+    res.render(createPath('Login_Page/Frontend/html/login'))
 })
 
 app.post('/signup', (req, res) => {

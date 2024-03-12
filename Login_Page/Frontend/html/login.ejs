@@ -2,22 +2,20 @@
 <html lang="en">
 <head>    
     <%- include('../../../Common_Elements/html/head.ejs') %>
-
-    <link rel="stylesheet" href="../css/style_registration.css"/>
-    <title>Регистрация</title>
+    <link rel="stylesheet" href="../css/style_login.css"/>
+    <title>Авторизация</title>
 </head>
 <body>
     <div class="wrapper">
         <%- include('../../../Common_Elements/html/header.ejs') %>
 
         <main class="main">
-            <form action="/signup" method="post">
-                <h2>Регистрация</h2>
+            <form action="/signin" method="post">
+                <h2>Авторизация</h2>
                 <input type="text" name="username" placeholder="Имя пользователя" required>
                 <input type="password" name="password" placeholder="Пароль" required>
-                <input type="password" name="confirm_password" placeholder="Подтвердите пароль" required>
-                <input type="submit" value="Зарегистрироваться">
-                <p>Уже зарегистрированы? <a href="/signin">Войти</a></p>
+                <input type="submit" value="Войти">
+                <p>Ещё не зарегистрированы? <a href="/signup">Зарегистрироваться</a></p>
             </form>
             
         </main>
