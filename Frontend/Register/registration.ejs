@@ -9,7 +9,6 @@
 <body>
     <div class="wrapper">
         <%- include('../Common_Elements/header.ejs') %>
-
         <main class="main">
             <form action="/signup" method="post">
                 <h2>Регистрация</h2>
@@ -18,8 +17,7 @@
                 <input type="password" name="confirm_password" placeholder="Подтвердите пароль" required>
                 <input type="submit" value="Зарегистрироваться">
                 <p>Уже зарегистрированы? <a href="/signin">Войти</a></p>
-            </form>
-            
+            </form>          
         </main>
         
         <%- include('../Common_Elements/footer.ejs') %>

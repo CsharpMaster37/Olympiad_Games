@@ -1,15 +1,28 @@
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
+const authRouter = require('./authRouter')
 const PORT = 3000
-const User = require('../Database/db')
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use("", authRouter)
 
 const path = require('path')
 
 const createPath = (page) => path.resolve('Frontend', `${page}.ejs`)
 
-app.listen(PORT, (error) => {
-    error ? console.log(error) : console.log(`listening port ${PORT}`)
-})
+const start = async () => {
+    try{
+        await mongoose.connect('mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster')
+        app.listen(PORT, () => console.log(`listening port ${PORT}`))
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+
+start()
 
 const staticPaths = [
     'Frontend',
@@ -26,7 +39,6 @@ staticPaths.forEach(path => {
     app.use(express.static(path));
 });
 
-app.use(express.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
     res.render(createPath('Main/index'))
@@ -48,11 +60,11 @@ app.get('/signin', (req, res) => {
     res.render(createPath('Login/login'))
 })
 
-app.post('/signup', (req, res) => {
+/* app.post('/signup', (req, res) => {
     const { username, password, repeatpassword } = req.body
     const user = new User({ username, password })
     user
         .save()
         .then((result) => res.send(result))
         .catch((error) => console.log(error))
-})
+}) */
