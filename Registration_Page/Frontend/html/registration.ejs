@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <%- include('../../../Common_Elements/html/head.ejs') %>
+
+    <link rel="stylesheet" href="../css/style_registration.css"/>
+    <title>Регистрация</title>
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('../../../Common_Elements/html/header.ejs') %>
+
+        <main class="main">
+        <div class="wrapper-main">
+            <div class="signup-window">
+                <form action="/signup" class="user-data" method="post">
+                    <div class="data-login">
+                        <label id = "label-username" class="data-label" for="input-username">Имя пользователя</label>
+                        <input type="text" id="input-username" class="data-input" name="username" placeholder="Например, Студент1"/>
+                    </div>
+                    <div class="data-password">
+                        <label id = "label-password" class="data-label" for="input-password">Пароль</label>
+                        <input type="password" class="data-input" id="input-password" name="password" placeholder="Например, qwerty123"/>
+                    </div>
+                    <div class="repeat-data-password">
+                        <label id = "label-repeat-password" class="data-label" for="input-repeat-password">Повторите пароль</label>
+                        <input type="password" class="data-input" id="input-repeat-password" name="repeatpassword" placeholder="Например, qwerty123"/>
+                    </div>
+                    <input id ="button-form-data" class="data-input" class = "button-form-data" type="submit" value="Зарегистрироваться"/>
+                </form>
+            </div>
+        </div>
+        </main>
+
+        <%- include('../../../Common_Elements/html/footer.ejs') %>
+    </div>
+</body>
+</html>
