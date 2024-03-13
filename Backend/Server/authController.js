@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const {validationResult} = require('express-validator')
 var jwt = require('jsonwebtoken');
 const {secret} = require('./config')
+//const login_back = require('./../../Frontend/Login/login_script')
 
 const generateAccessToken = (id, roles) => {
     const payload = {
@@ -31,7 +32,7 @@ class authController{
             const userRole = await Role.findOne({value: 'USER'})
             const user = new User({username, password: hashPassword, roles:[userRole.value]})
             await user.save()
-            return res.json({message: 'Пользователь успешно зарегистрирован!'})
+            return res.redirect('/')
         }
         catch(e){
             console.log(e)
@@ -43,15 +44,17 @@ class authController{
             const {username, password} = req.body
             const user = await User.findOne({username})
             if(!user){
+                usernameField.addEventListener("change", validationMessage)
                 return res.status(400).json({message: `Пользователь ${username} не найден!`})
             }
             const validPassword = bcrypt.compareSync(password, user.password)
             if(!validPassword)
-            {
-                return res.status(400).json({message: `Введён неверный пароль!`})
+            { 
+                //res.redirect('/signin')
+                return res.status(400)
             }
             const token = generateAccessToken(user._id, user.roles)
-            return res.json({token})
+            return res.redirect('/')
         }
         catch(e){
             console.log(e)

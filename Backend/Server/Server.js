@@ -59,12 +59,3 @@ app.get('/signup', (req, res) => {
 app.get('/signin', (req, res) => {
     res.render(createPath('Login/login'))
 })
-
-/* app.post('/signup', (req, res) => {
-    const { username, password, repeatpassword } = req.body
-    const user = new User({ username, password })
-    user
-        .save()
-        .then((result) => res.send(result))
-        .catch((error) => console.log(error))
-}) */
