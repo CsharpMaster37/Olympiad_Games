@@ -10,10 +10,13 @@
         <%- include('../Common_Elements/header.ejs') %>
 
         <main class="main">
-            <form action="/signin" method="post" id="login-form">
+            <form class="form1" action="/signin" method="post" id="login-form">
                 <h2>Авторизация</h2>
-                <input id="username" type="text" name="username" placeholder="Имя пользователя" required>
-                <input type="password" name="password" placeholder="Пароль" required>
+                <input id="username" type="text" name="username" placeholder="Имя пользователя">
+                <input type="password" name="password" placeholder="Пароль">
+                <% if (error_message) { %>
+                    <p class="error_messange"><%= error_message %></p>
+                <% } %>   
                 <input type="submit" value="Войти">
                 <p>Ещё не зарегистрированы? <a href="/signup">Зарегистрироваться</a></p>
             </form>

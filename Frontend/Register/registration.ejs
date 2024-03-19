@@ -12,9 +12,13 @@
         <main class="main">
             <form action="/signup" method="post">
                 <h2>Регистрация</h2>
-                <input type="text" name="username" placeholder="Имя пользователя" required>
-                <input type="password" name="password" placeholder="Пароль" required>
-                <input type="password" name="confirm_password" placeholder="Подтвердите пароль" required>
+                <input type="text" name="username" placeholder="Имя пользователя">
+                <!-- <p class="error_messange">Заполните поле!</p>           -->                             
+                <input type="password" name="password" placeholder="Пароль">
+                <input type="password" name="confirm_password" placeholder="Подтвердите пароль">
+                <% if (error_message) { %>
+                    <p class="error_messange"><%= error_message %></p>
+                <% } %>   
                 <input type="submit" value="Зарегистрироваться">
                 <p>Уже зарегистрированы? <a href="/signin">Войти</a></p>
             </form>          
