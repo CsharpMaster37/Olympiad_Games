@@ -21,11 +21,11 @@ app.set('views', path.join(__dirname, './../../Frontend/Register'))
 app.set('view engine', 'ejs');
 
 const start = async () => {
-    try{
+    try {
         await mongoose.connect('mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster')
         app.listen(PORT, () => console.log(`listening port ${PORT}`))
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 }
@@ -62,9 +62,9 @@ app.get('/carousel', (req, res) => {
 })
 
 app.get('/signup', (req, res) => {
-    res.render(createPath('Register/registration'), {message: null})
+    res.render(createPath('Register/registration'), { error_message: null })
 })
 
 app.get('/signin', (req, res) => {
-    res.render(createPath('Login/login'))
+    res.render(createPath('Login/login'), { error_message: null })
 })
