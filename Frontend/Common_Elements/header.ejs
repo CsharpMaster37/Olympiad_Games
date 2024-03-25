@@ -40,10 +40,16 @@
                     >Профиль</a
                 >
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/signin">Войти</a></li>
-                    <li>
-                    <a class="dropdown-item" href="/signup">Зарегистрироваться</a>
-                    </li>
+                    <% if (isAuthenticated) { %>
+                        <li>
+                            <form action="/logout?_method=DELETE" method="POST">
+                                <button class="dropdown-item" type="submit">Выйти</button>
+                            </form>
+                        </li>
+                    <% } else { %>
+                        <li><a class="dropdown-item" href="/signin">Войти</a></li>
+                        <li><a class="dropdown-item" href="/signup">Зарегистрироваться</a></li>
+                    <% } %>
                 </ul>
                 </div>
             </div>

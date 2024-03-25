@@ -14,8 +14,8 @@
                 <h2>Авторизация</h2>
                 <input id="username" type="text" name="username" placeholder="Имя пользователя">
                 <input type="password" name="password" placeholder="Пароль">
-                <% if (error_message) { %>
-                    <p class="error_messange"><%= error_message %></p>
+                <% if (messages.error) { %>
+                    <p class="error_messange"><%= messages.error %></p>
                 <% } %>   
                 <input type="submit" value="Войти">
                 <p>Ещё не зарегистрированы? <a href="/signup">Зарегистрироваться</a></p>

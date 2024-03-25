@@ -1,37 +1,53 @@
-const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
-const authRouter = require('./authRouter')
-const PORT = 3000
-const cookieParser = require('cookie-parser')
-const session = require('express-session')
+const express = require('express');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const passport = require('passport');
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser');
+const initializePassport = require('./passport-config');
+const Users = require('../Models/Users');
+const Roles = require('../Models/Roles');
+const path = require('path');
+const methodOverride = require('method-override')
+const bcrypt = require('bcryptjs')
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use("", authRouter)
+const app = express();
+const PORT = 3000;
+
+initializePassport(
+    passport,
+    async username => await Users.findOne({ username: username }),
+    async id => await Users.findOne({ _id: id })
+);
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(session({
-    secret: 'your_secret_key', // Секретный ключ для подписи идентификатора сеанса
+    secret: 'somen_secret_key', // Секретный ключ для подписи идентификатора сеанса
     resave: false, // Не сохранять сеанс, если он не был изменен
     saveUninitialized: false // Не сохранять новые, но не измененные сеансы
 }));
-
-const path = require('path')
-const createPath = (page) => path.resolve('Frontend', `${page}.ejs`)
-app.set('views', path.join(__dirname, './../../Frontend/Register'))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride('_method'))
+app.use(flash());
 app.set('view engine', 'ejs');
 
+// Подключение к базе данных и запуск сервера
 const start = async () => {
     try {
-        await mongoose.connect('mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster')
-        app.listen(PORT, () => console.log(`listening port ${PORT}`))
+        await mongoose.connect('mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster');
+        app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+    } catch (e) {
+        console.error("Ошибка при запуске сервера:", e);
     }
-    catch (e) {
-        console.log(e)
-    }
-}
+};
 
-start()
+start();
 
+// Подключение статических файлов
 const staticPaths = [
     'Frontend',
     'Frontend/Common_Elements',
@@ -42,29 +58,106 @@ const staticPaths = [
     'Frontend/Main'
 ];
 
-// Используем один обработчик для всех статических файлов
 staticPaths.forEach(path => {
     app.use(express.static(path));
 });
 
+// Определение маршрутов
+const createPath = (page) => path.resolve('Frontend', `${page}.ejs`);
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.isAuthenticated();
+    res.locals.username = req.user ? req.user.username : 'Guest';
+    next();
+});
 
+// При обработке маршрутов, не нужно передавать isAuthenticated в каждом вызове res.render
 app.get('/', (req, res) => {
-    res.render(createPath('Main/index'))
-})
+    res.render(createPath('Main/index'));
+});
 
-app.get('/square', (req, res) => {
-    res.render(createPath('Square_game/game_index'))
-})
+app.get('/square', checkAuthenticated, (req, res) => {
+    res.render(createPath('Square_game/game_index'));
+});
 
-app.get('/carousel', (req, res) => {
-    res.render(createPath('Carousel_game/index_MathematicalCarousel'))
-})
+app.get('/carousel', checkAuthenticated, (req, res) => {
+    res.render(createPath('Carousel_game/index_MathematicalCarousel'));
+});
 
-app.get('/signup', (req, res) => {
-    res.render(createPath('Register/registration'), { error_message: null })
-})
+app.get('/signup', checkAuthenticatedLogAndReg, (req, res) => {
+    res.render(createPath('Register/registration'), { error_message: null });
+});
 
-app.get('/signin', (req, res) => {
-    res.render(createPath('Login/login'), { error_message: null })
-})
+app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
+    res.render(createPath('Login/login'), { error_message: null });
+});
+
+app.post('/signin',checkAuthenticatedLogAndReg, passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/signin',
+    failureFlash:true
+}))
+
+app.post('/signup', async (req, res) => {
+    try {
+        const { username, password, confirm_password } = req.body
+        if (username == '') {
+            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Введите имя пользователя!' });
+        }
+        if (password == '') {
+            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Введите пароль!' });
+        }
+        if (confirm_password == '') {
+            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Введите повторение пароля!' });
+        }
+        if (password != confirm_password) {
+            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Пароли не совпадают!' });
+        }
+        const candidate = await Users.findOne({ username })
+        if (candidate) {
+            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
+        }
+        const hashPassword = bcrypt.hashSync(password, 7);
+        const userRole = await Roles.findOne({ value: 'USER' })
+        const user = new Users({ username, password: hashPassword, roles: [userRole.value] })
+        await user.save()
+        return res.redirect('/')
+    }
+    catch (e) {
+        console.log(e)
+        res.status(400).json({ message: 'Signup error' })
+    }
+});
+
+app.delete('/logout', (req, res) => {
+    req.logout(req.user, err => {
+        if(err) return next(err)
+        res.redirect('/')
+    })
+});
+
+function checkAuthenticated(req,res,next){
+    if(req.isAuthenticated()){
+        return next()
+    }
+    res.redirect('/signin')
+}
+
+function checkAuthenticatedLogAndReg(req,res,next){
+    if(req.isAuthenticated()){
+        return res.redirect('/')
+    }
+    return next()
+}
+
+function checkNotAuthenticated(req,res,next){
+    if(!req.isAuthenticated()){
+        res.redirect('/signin')
+    }
+    next()
+}
+
+module.exports = {
+    checkAuthenticated: checkAuthenticated,
+    checkNotAuthenticated: checkNotAuthenticated
+};
