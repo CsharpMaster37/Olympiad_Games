@@ -2,7 +2,7 @@ var dataJson = {
     "score_first_question": 3,
     "score_failure": 3,
     "score_success": 1,
-    "total_questions": 100,
+    "total_questions": 10,
     "questions": [
         {
             "question": "Кто написал 'Мастер и Маргарита'?",

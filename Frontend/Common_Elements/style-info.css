@@ -10,15 +10,13 @@
   }
 
 .Info-window{
-    background-color: #11998e;
+/*     background-color: #11998e; */
     height: 100%;
     display: flex;
-    border-radius: 3px;
-    border: 2px solid green;
 }
 
 .Info-window p{
-    color: #FACD3D;
+    color: #000000;
     font-weight: 700;
     font-size: 30px;
 }

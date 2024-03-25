@@ -58,9 +58,9 @@
 }
 
 .button-form-answer{
-    border: 1px solid green;
-    color:#fff;
-    background: linear-gradient(to left, #a8ff78,#78ffd6,#a8ff78);
+    border: 1px solid #000000;
+    color: #000000;  
+    background: linear-gradient(to left, #2f9bca,#e0e9ee,#2f9bca);
     text-decoration: none;
     border-radius: 5px;
     background-size: 200%;
@@ -70,6 +70,10 @@
     text-align: center;
     font-size: 100%;
     margin-top: 1%;
+}
+
+.button-form-answer:hover{
+    background-position: right;
 }
 
 #label-question{
@@ -84,19 +88,17 @@
     width: 70%;
     align-self:flex-start;
     margin-top: 2%;
-    background-color: rgba(0,0,0,0.1);
-    color: white;  
+    /* background-color: rgba(0,0,0,0.2); */
+    background-color: rgba(255, 255, 255, 0); /* Прозрачный фон */
+    border: 2px solid #000000;
+    border-radius: 5px;
+    color: #000000;  
     height: 100%;  
     font-size: 25px;
 }
 
 #input-answer::placeholder {
-    color: white;
-}
-
-input,input:focus,input:invalid {
-    border: none; 
-    outline: none;
+    color: rgb(0, 0, 0);
 }
 
 div::-webkit-scrollbar {
