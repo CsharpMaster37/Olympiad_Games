@@ -1,34 +1,56 @@
-@media screen and (max-width: 700px) {
+/* @media screen and (max-width: 700px) {
     .button-toolbar{
-        padding: 5px 20px;
         font-size: 15px;
     }
   }
   @media screen and (min-width: 701px) {
     .button-toolbar{
-        padding: 5px 30px;
         font-size: 20px;
     }
-  }
+  } */
 
-  .button-toolbar{
-    border: 1px solid green;
-    color:#fff;
-    background: linear-gradient(to left, #a8ff78,#78ffd6,#a8ff78);
+.button-toolbar{
+    color:#000000;
     text-decoration: none;
-    border-radius: 5px;
-    background-size: 200%;
+    border-radius: 10px;
     transition: .5s;
-    margin: 2px 2px;
+    background-color: transparent;    
+    padding: 4px 4px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.btn-group{
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    text-align: right;
+    justify-content: flex-end;
+    margin: 2px;
 }
 
 .button-toolbar:hover{
-    background-position: right;
+    background-color: #96dfff;
+}
+
+.main-name{
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    display: inline-flex;
+    height: 100%;
+}
+
+.main-name a{
+    color: #000000;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 .header{
-    background-color: #5EBEC4;
-    border-radius: 5px;
+    background-color: #ffffff;
 }
 
 .wrapper{
@@ -37,34 +59,17 @@
     flex-direction: column;
 }
 
-
 .dropdown{
     display: flex;
     justify-content: end;
-    align-items: center;
 }
 
-.header-main
-{
+.wrapper-button{
     display: flex;
-    justify-content: start;
-    align-items: center;
+    justify-content: center;
 }
 
-.btn-group{
-    display: flex;
-    justify-content: end;
-}
-
-.square{
-    display: flex;
-    justify-content: end;
-    align-items: center;
-}
-
-.carousel
-{
-    display: flex;
-    justify-content: start;
-    align-items: center;
+.header-main, .square, .carousel, .rating{
+    display: inline-flex;   
+    margin: 2px 6px;   
 }
