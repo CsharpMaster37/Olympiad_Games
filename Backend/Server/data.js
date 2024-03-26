@@ -2,15 +2,19 @@ var _data = require('./../Data/Questions_Square.json');
 
 var topics = _data.topics.map(topic => topic.topic);
 // Функция для получения темы по индексу
-function getTopics() {
+/* function getTopics() {
     return topics
+} */
+
+function getTopics() {
+    return _data.topics
 }
 
 function getTopicByIndex(index) {
     if (index >= 0 && index < topics.length) {
         return topics[index];
     } else {
-        return null; // Или можно выбрасывать ошибку или возвращать undefined в зависимости от требований
+        return null;
     }
 }
 
@@ -29,7 +33,7 @@ function checkAnswerByTopicIndexAndLevel(topicIndex, level, answer) {
     if (question) {
         return question.answer === answer;
     } else {
-        return false; // Или можно выбрасывать ошибку или возвращать undefined в зависимости от требований
+        return false;
     }
 }
 

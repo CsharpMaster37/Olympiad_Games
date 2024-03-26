@@ -9,8 +9,10 @@
       <form action="/sendAnswer" method="POST" class="question_form">
         <input type="hidden" name="rowIndex" id="rowIndexInput">
         <input type="hidden" name="cellIndex" id="cellIndexInput">
-        <p><%- topics[0] %></p>
+        <p id="question"></p>
+        <input type="text" id="answer-input" name="answer-input" placeholder="Введите ответ!"/>
         <button class="send-answer" id="send-answer" type="submit">Проверить</button>
       </form>
     </div>
   </div>
+  

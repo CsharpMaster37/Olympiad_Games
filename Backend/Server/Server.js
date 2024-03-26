@@ -74,6 +74,10 @@ app.use((req, res, next) => {
 });
 
 
+app.get('/topics_square', (req, res) => {
+    res.json(topics); // Отправляем массив topics в виде JSON
+});
+
 // При обработке маршрутов, не нужно передавать isAuthenticated в каждом вызове res.render
 app.get('/', (req, res) => {
     res.render(createPath('Main/index'));
@@ -101,8 +105,10 @@ app.post('/signin',checkAuthenticatedLogAndReg, passport.authenticate('local', {
     failureFlash:true
 }))
 
-app.post('/sendAnswer', (req,res) => {
-    res.json(req.body)
+app.post('/sendAnswer_Square', (req,res) => {
+    const { rowIndex, cellIndex, inputValue } = req.body
+    var answer = (inputValue == topics[rowIndex-1].questions[cellIndex-1].answer)
+    res.json(answer)
 })
 
 app.post('/signup', async (req, res) => {

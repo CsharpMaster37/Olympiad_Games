@@ -5,8 +5,6 @@ var rowIndex = 0;
 var cellIndex = 0;
 let rowsCount = [0, 0, 0, 0, 0, 0]
 let cellsCount = [0, 0, 0, 0, 0, 0]
-
-
 //Закрытие модального окна
 document.getElementById("close-button-modal-window").addEventListener("click",
     function(){    
@@ -14,9 +12,8 @@ document.getElementById("close-button-modal-window").addEventListener("click",
     }
 )
 
-
 //Открытие модального окна
-for (let i = 0; i < buttons.length; ++i) {
+for (let i = 0; i < buttons.length; ++i) {  
     buttons[i].addEventListener(
         "click",
         function (event) {
@@ -25,35 +22,73 @@ for (let i = 0; i < buttons.length; ++i) {
             var cell = button.parentElement; // Получаем ячейку, содержащую кнопку
             var row = cell.parentElement; // Получаем строку, содержащую ячейку
             rowIndex = row.rowIndex; // Индекс строки
-            cellIndex = cell.cellIndex; // Индекс ячейки в строке      
+            cellIndex = cell.cellIndex; // Индекс ячейки в строке
+            fetch('/topics_square')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("question").textContent = data[rowIndex-1].questions[cellIndex-1].question
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+                
             document.getElementById("send-answer").addEventListener("click", function() {
                 // Установка значений rowIndex и cellIndex для скрытых полей
                 document.getElementById("rowIndexInput").value = rowIndex;
-                document.getElementById("cellIndexInput").value = cellIndex;
+                document.getElementById("cellIndexInput").value = cellIndex; 
             });
         }
     );
 }
 
-document.getElementById("send-answer").addEventListener("click",
-    function(){    
-        //Временный рандом для тестов
-        var randomNum = Math.random();
-        var color = randomNum < 0.2 ? "red" : "green";
-        var index = (rowIndex-1)*5+(cellIndex-1)
-        //
-        if(color == "green")
-        {
-            btnGreen(buttons[index])
-        }
-        buttons[index].style.background = "none"
-        buttons[index].style.backgroundColor = color
-        buttons[index].disabled = true
+document.getElementById("send-answer").addEventListener("click", function(event){
+    event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)
 
-        //Закроем окно
-        document.getElementById("modal-window-question").classList.remove("open")
-    }
-);
+    // Получаем значение из input
+    var inputValue = document.getElementById("answer-input").value;
+
+    // Установка значений rowIndex и cellIndex для скрытых полей
+    document.getElementById("rowIndexInput").value = rowIndex;
+    document.getElementById("cellIndexInput").value = cellIndex; 
+
+    // Отправка данных на сервер
+    fetch('/sendAnswer_Square', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rowIndex: rowIndex, cellIndex: cellIndex, inputValue: inputValue })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Обработка ответа от сервера
+        var color = data ? "green" : "red";
+        var index = (rowIndex-1)*5 + (cellIndex-1);       
+        // Применяем изменения к кнопке
+        if(color == "green") {
+            btnGreen(buttons[index]);
+        }
+        buttons[index].style.background = "none";
+        buttons[index].style.backgroundColor = color;
+        buttons[index].disabled = true;
+
+        // Закрываем окно
+        document.getElementById("modal-window-question").classList.remove("open");
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
+});
 
 function btnGreen(btn)
 {
