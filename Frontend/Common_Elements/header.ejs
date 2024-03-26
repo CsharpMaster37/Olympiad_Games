@@ -36,8 +36,13 @@
                     class="button-toolbar btn-sm dropdown-toggle"
                     type="button"
                     data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    >Профиль</a
+                    aria-expanded="false">
+                    <% if (isAuthenticated) { %>
+                        <%= username %>
+                    <% } else { %>
+                        Профиль
+                    <% } %>
+                    </a
                 >
                 <ul class="dropdown-menu">
                     <% if (isAuthenticated) { %>

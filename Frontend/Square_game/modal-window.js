@@ -6,6 +6,7 @@ var cellIndex = 0;
 let rowsCount = [0, 0, 0, 0, 0, 0]
 let cellsCount = [0, 0, 0, 0, 0, 0]
 
+
 //Закрытие модального окна
 document.getElementById("close-button-modal-window").addEventListener("click",
     function(){    
@@ -25,7 +26,11 @@ for (let i = 0; i < buttons.length; ++i) {
             var row = cell.parentElement; // Получаем строку, содержащую ячейку
             rowIndex = row.rowIndex; // Индекс строки
             cellIndex = cell.cellIndex; // Индекс ячейки в строке      
-            
+            document.getElementById("send-answer").addEventListener("click", function() {
+                // Установка значений rowIndex и cellIndex для скрытых полей
+                document.getElementById("rowIndexInput").value = rowIndex;
+                document.getElementById("cellIndexInput").value = cellIndex;
+            });
         }
     );
 }

@@ -10,6 +10,8 @@ const Roles = require('../Models/Roles');
 const path = require('path');
 const methodOverride = require('method-override')
 const bcrypt = require('bcryptjs')
+const questionModule = require('./data');
+var topics = questionModule.getTopics()
 
 const app = express();
 const PORT = 3000;
@@ -71,13 +73,14 @@ app.use((req, res, next) => {
     next();
 });
 
+
 // При обработке маршрутов, не нужно передавать isAuthenticated в каждом вызове res.render
 app.get('/', (req, res) => {
     res.render(createPath('Main/index'));
 });
 
 app.get('/square', checkAuthenticated, (req, res) => {
-    res.render(createPath('Square_game/game_index'));
+    res.render(createPath('Square_game/game_index'), {topics: topics});
 });
 
 app.get('/carousel', checkAuthenticated, (req, res) => {
@@ -97,6 +100,10 @@ app.post('/signin',checkAuthenticatedLogAndReg, passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash:true
 }))
+
+app.post('/sendAnswer', (req,res) => {
+    res.json(req.body)
+})
 
 app.post('/signup', async (req, res) => {
     try {
