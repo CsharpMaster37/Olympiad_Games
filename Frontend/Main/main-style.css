@@ -1,0 +1,42 @@
+.wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.rules_wrapper{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.rules_square, .rules_carousel{
+    width: 30%;
+    height: 100%;
+    margin-right: 5%;
+    border: 2px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+}
+
+.title-game{
+    align-self: center;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.title-rules{
+    text-decoration:underline;
+    align-self: center;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+li{
+    font-weight: 400;
+}
