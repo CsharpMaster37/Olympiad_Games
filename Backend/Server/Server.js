@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongodb-session')(session)
 const passport = require('passport');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
@@ -12,9 +13,15 @@ const methodOverride = require('method-override')
 const bcrypt = require('bcryptjs')
 const questionModule = require('./data');
 var topics = questionModule.getTopics()
+const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster'
 
 const app = express();
 const PORT = 3000;
+
+const store = new MongoStore({
+    collection: 'Sessions',
+    uri: MONGOBD_URI
+})
 
 initializePassport(
     passport,
@@ -29,7 +36,8 @@ app.use(cookieParser());
 app.use(session({
     secret: 'somen_secret_key', // Секретный ключ для подписи идентификатора сеанса
     resave: false, // Не сохранять сеанс, если он не был изменен
-    saveUninitialized: false // Не сохранять новые, но не измененные сеансы
+    saveUninitialized: false, // Не сохранять новые, но не измененные сеансы
+    store: store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -37,10 +45,11 @@ app.use(methodOverride('_method'))
 app.use(flash());
 app.set('view engine', 'ejs');
 
+
 // Подключение к базе данных и запуск сервера
 const start = async () => {
     try {
-        await mongoose.connect('mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster');
+        await mongoose.connect(MONGOBD_URI);
         app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
     } catch (e) {
         console.error("Ошибка при запуске сервера:", e);
@@ -99,7 +108,7 @@ app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
     res.render(createPath('Login/login'), { error_message: null });
 });
 
-app.post('/signin',checkAuthenticatedLogAndReg, passport.authenticate('local', {
+app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/signin',
     failureFlash:true
@@ -143,10 +152,13 @@ app.post('/signup', async (req, res) => {
 });
 
 app.delete('/logout', (req, res) => {
-    req.logout(req.user, err => {
-        if(err) return next(err)
-        res.redirect('/')
-    })
+    const sessionId = req.sessionID;
+    store.destroy(sessionId, (error) => {
+        if (error) {
+            console.error('Ошибка при удалении сеанса из базы данных:', error);
+        }
+        res.redirect('/');
+    });
 });
 
 function checkAuthenticated(req,res,next){
