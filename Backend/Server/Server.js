@@ -61,14 +61,15 @@ start();
 // Подключение статических файлов
 const staticPaths = [
     'Frontend',
+    'Frontend/Rating',
     'Frontend/Common_Elements',
     'Frontend/Square_game',
     'Frontend/Carousel_game',
     'Frontend/Register',
     'Frontend/Login',
-    'Frontend/Main'
+    'Frontend/Main',
+    'Frontend/AdminPanel',
 ];
-
 staticPaths.forEach(path => {
     app.use(express.static(path));
 });
@@ -107,6 +108,14 @@ app.get('/signup', checkAuthenticatedLogAndReg, (req, res) => {
 
 app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
     res.render(createPath('Login/login'), { error_message: null });
+});
+
+app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
+    res.render(createPath('AdminPanel/admin'));
+});
+
+app.get('/rating', checkAuthenticated, (req, res) => {
+    res.render(createPath('Rating/rating'));
 });
 
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
@@ -180,6 +189,13 @@ function checkNotAuthenticated(req, res, next) {
         res.redirect('/signin')
     }
     next()
+}
+
+function checkAuthenticatedLogAndRegAndAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.role != 'ADMIN') {
+        return res.redirect('/')
+    }
+    return next()
 }
 
 module.exports = {
