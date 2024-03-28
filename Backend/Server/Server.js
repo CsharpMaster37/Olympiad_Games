@@ -110,9 +110,77 @@ app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
     res.render(createPath('Login/login'), { error_message: null });
 });
 
-app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
-    res.render(createPath('AdminPanel/admin'));
+app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const users = await Users.find({}, 'username'); // Получаем список пользователей с их именами
+        res.render(createPath('AdminPanel/admin'), { users: users });
+    } catch (err) {
+        console.error('Ошибка при получении списка пользователей:', err);
+        res.status(500).send('Ошибка при загрузке пользователей.');
+    }
 });
+
+// Обработка запроса на удаление пользователя
+app.delete('/admin/:id', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        await Users.findByIdAndDelete(userId); // Удаляем пользователя по ID
+        res.redirect('/admin');
+    } catch (err) {
+        console.error('Ошибка при удалении пользователя:', err);
+        res.status(500).send('Ошибка при удалении пользователя.');
+    }
+});
+
+// Обработка запроса на редактирование пользователя (показ формы редактирования)
+app.get('/admin/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await Users.findById(userId); // Находим пользователя по ID
+        res.render(createPath('AdminPanel/admin_edit_user'), { user: user });
+    } catch (err) {
+        console.error('Ошибка при загрузке формы редактирования пользователя:', err);
+        res.status(500).send('Ошибка при загрузке формы редактирования пользователя.');
+    }
+});
+
+// Обработка запроса на сохранение изменений пользователя
+app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { username, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 7);
+        await Users.findByIdAndUpdate(userId, { username: username, password: hashedPassword });
+        res.redirect('/admin');
+    } catch (err) {
+        console.error('Ошибка при сохранении изменений пользователя:', err);
+        res.status(500).send('Ошибка при сохранении изменений пользователя.');
+    }
+});
+
+// Маршрут для отображения формы добавления нового пользователя
+app.get('/admin/add', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
+    res.render(createPath('AdminPanel/admin_add_user'));
+});
+
+// Обработка запроса на добавление нового пользователя
+app.post('/admin/add', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const existingUser = await Users.findOne({ username });
+        if (existingUser) {
+            return res.status(400).send('Пользователь с таким именем уже существует');
+        }
+        const hashedPassword = await bcrypt.hash(password, 7);
+        const newUser = new Users({ username, password: hashedPassword, role: 'USER' });
+        await newUser.save();
+        res.redirect('/admin');
+    } catch (err) {
+        console.error('Ошибка при добавлении нового пользователя:', err);
+        res.status(500).send('Ошибка при добавлении нового пользователя.');
+    }
+});
+
 
 app.get('/rating', checkAuthenticated, (req, res) => {
     res.render(createPath('Rating/rating'));
