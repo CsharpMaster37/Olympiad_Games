@@ -73,7 +73,7 @@
     justify-content: center;
 }
 
-.header-main, .square, .carousel, .rating{
+.header-main, .square, .carousel, .rating, .admin{
     display: inline-flex;   
     margin: 2px 6px;   
 }

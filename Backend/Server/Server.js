@@ -79,6 +79,7 @@ const createPath = (page) => path.resolve('Frontend', `${page}.ejs`);
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.username = req.user ? req.user.username : 'Guest';
+    res.locals.role = req.user ? req.user.role : null;
     next();
 });
 
@@ -93,7 +94,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/square', checkAuthenticated, (req, res) => {
-    res.render(createPath('Square_game/game_index'), {topics: topics});
+    res.render(createPath('Square_game/game_index'), { topics: topics });
 });
 
 app.get('/carousel', checkAuthenticated, (req, res) => {
@@ -111,12 +112,12 @@ app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/signin',
-    failureFlash:true
+    failureFlash: true
 }))
 
-app.post('/sendAnswer_Square', (req,res) => {
+app.post('/sendAnswer_Square', (req, res) => {
     const { rowIndex, cellIndex, inputValue } = req.body
-    var answer = (inputValue == topics[rowIndex-1].questions[cellIndex-1].answer)
+    var answer = (inputValue == topics[rowIndex - 1].questions[cellIndex - 1].answer)
     res.json(answer)
 })
 
@@ -140,8 +141,7 @@ app.post('/signup', async (req, res) => {
             return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
         }
         const hashPassword = bcrypt.hashSync(password, 7);
-        const userRole = await Roles.findOne({ value: 'USER' })
-        const user = new Users({ username, password: hashPassword, roles: [userRole.value] })
+        const user = new Users({ username, password: hashPassword, role: 'USER' })
         await user.save()
         return res.redirect('/')
     }
@@ -161,22 +161,22 @@ app.delete('/logout', (req, res) => {
     });
 });
 
-function checkAuthenticated(req,res,next){
-    if(req.isAuthenticated()){
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
         return next()
     }
     res.redirect('/signin')
 }
 
-function checkAuthenticatedLogAndReg(req,res,next){
-    if(req.isAuthenticated()){
+function checkAuthenticatedLogAndReg(req, res, next) {
+    if (req.isAuthenticated()) {
         return res.redirect('/')
     }
     return next()
 }
 
-function checkNotAuthenticated(req,res,next){
-    if(!req.isAuthenticated()){
+function checkNotAuthenticated(req, res, next) {
+    if (!req.isAuthenticated()) {
         res.redirect('/signin')
     }
     next()
