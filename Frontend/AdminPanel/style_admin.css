@@ -1,0 +1,43 @@
+.wrapper-table-users{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.table-users{
+    margin: 1%;
+}
+
+.table-users th, .table-users td {
+    border: 2px solid #000000;
+    padding: 0.5%;
+    word-wrap: break-word;
+}
+
+.button-delete {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button-delete:hover {
+    background-color: #0056b3;
+}
+
+.ref-edit{
+    text-decoration: none;
+    margin: 0.5%;
+}
+
+.ref-edit, .button-delete {
+    margin-right: 1%;
+} 
+
+.actions-container {
+    display: flex;
+    flex-direction: row;
+}
