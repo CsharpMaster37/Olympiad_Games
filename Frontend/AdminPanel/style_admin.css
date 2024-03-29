@@ -1,17 +1,18 @@
-.wrapper-table-users{
+.wrapper-table{
     display: flex;
-    height: 100%;
-    flex-direction: column;
+    width: 100%;
 }
 
 .table-users{
     margin: 1%;
+    width: 100%;
 }
 
 .table-users th, .table-users td {
     border: 2px solid #000000;
     padding: 0.5%;
-    word-wrap: break-word;
+    width: auto;
+    white-space: nowrap
 }
 
 .button-delete {
@@ -22,6 +23,11 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
+}
+
+.href-container{
+    display: flex;
+    flex-direction: column;
 }
 
 .button-delete:hover {

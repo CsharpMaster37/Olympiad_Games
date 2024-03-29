@@ -13,6 +13,28 @@ const userSchema = new Schema({
     role: {
         type: String,
         ref: 'Role',
+    },
+    gameProgress: {
+        square: {
+            values: {
+                type: [Number],
+                default: [],
+            },
+            score: {
+                type: Number,
+                default: 0,
+            }
+        },
+        carousel: {
+            values: {
+                type: [Number],
+                default: [],
+            },
+            score: {
+                type: Number,
+                default: 0,
+            }
+        }
     }
 }, { versionKey: false })
 

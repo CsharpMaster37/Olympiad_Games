@@ -10,11 +10,12 @@
         <%- include('../Common_Elements/header.ejs') %>
         <main class="main">
             <div class="col-sm-12">
-              <div class="wrapper-table-users">
+              <div class="wrapper-table">
                 <table class="table-users">
                   <thead>
                       <tr>
                           <th scope="col">Имя пользователя</th>
+                          <th scope="col">Роль</th>
                           <th scope="col">Действия</th>
                       </tr>
                   </thead>
@@ -22,6 +23,7 @@
                       <% users.forEach(user => { %>
                           <tr>
                               <td><%= user.username %></td>
+                              <td><%= user.role %></td>
                               <td>
                                 <div class="actions-container">
                                   <a class="ref-edit" href="/admin/<%= user._id %>/edit">Редактировать</a>
@@ -35,11 +37,13 @@
                           </tr>
                       <% }); %>
                   </tbody>
-              </table>
-              <a class="ref-edit" href="/admin/add">Добавить нового пользователя</a>
-              <a class="ref-edit" href="/admin/remove-prog-carousel">Общий сброс прогресса карусели</a>
-              <a class="ref-edit" href="/admin/remove-prog-square">Общий сброс прогресса квадрата</a>
-            </div>              
+                </table>  
+              </div>
+              <div class="href-container">
+                <a class="ref-edit" href="/admin/add">Добавить нового пользователя</a>
+                <a class="ref-edit" href="/admin/remove-prog-carousel">Общий сброс прогресса карусели</a>
+                <a class="ref-edit" href="/admin/remove-prog-square">Общий сброс прогресса квадрата</a>
+              </div>        
           </div>
         </main>
         <%- include('../Common_Elements/footer.ejs') %>

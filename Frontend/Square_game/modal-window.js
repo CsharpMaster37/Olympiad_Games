@@ -5,6 +5,7 @@ var rowIndex = 0;
 var cellIndex = 0;
 let rowsCount = [0, 0, 0, 0, 0, 0]
 let cellsCount = [0, 0, 0, 0, 0, 0]
+getProgress()
 //Закрытие модального окна
 document.getElementById("close-button-modal-window").addEventListener("click",
     function () {
@@ -12,17 +13,45 @@ document.getElementById("close-button-modal-window").addEventListener("click",
     }
 )
 
+function getProgress(){
+    fetch('/getProgress_square')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById("count-point").innerHTML = data.score
+        var i = 0
+        data.values.forEach(element => {
+            if(element != null)
+                btnForProgress(buttons[i], element > 0 ? "Green":"Red")
+            i++
+        });
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
+}
+
+function btnForProgress(btn,color){
+    btn.style.background = "none";
+    btn.style.backgroundColor = color;
+    btn.disabled = true;
+}
+
 //Открытие модального окна
 for (let i = 0; i < buttons.length; ++i) {
     buttons[i].addEventListener(
         "click",
         function (event) {
-            document.getElementById("modal-window-question").classList.add("open");
             var button = event.target;
             var cell = button.parentElement; // Получаем ячейку, содержащую кнопку
             var row = cell.parentElement; // Получаем строку, содержащую ячейку
             rowIndex = row.rowIndex; // Индекс строки
             cellIndex = cell.cellIndex; // Индекс ячейки в строке
+            
             fetch('/topics_square')
                 .then(response => {
                     if (!response.ok) {
@@ -36,7 +65,7 @@ for (let i = 0; i < buttons.length; ++i) {
                 .catch(error => {
                     console.error('There has been a problem with your fetch operation:', error);
                 });
-
+            document.getElementById("modal-window-question").classList.add("open");    
             document.getElementById("send-answer").addEventListener("click", function () {
                 // Установка значений rowIndex и cellIndex для скрытых полей
                 document.getElementById("rowIndexInput").value = rowIndex;
@@ -55,14 +84,14 @@ document.getElementById("send-answer").addEventListener("click", function (event
     // Установка значений rowIndex и cellIndex для скрытых полей
     document.getElementById("rowIndexInput").value = rowIndex;
     document.getElementById("cellIndexInput").value = cellIndex;
-
+    var pointsValue = parseInt(buttons[(rowIndex - 1) * 5 + (cellIndex - 1)].innerHTML[0])*10
     // Отправка данных на сервер
     fetch('/sendAnswer_Square', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ rowIndex: rowIndex, cellIndex: cellIndex, inputValue: inputValue })
+        body: JSON.stringify({ rowIndex: rowIndex, cellIndex: cellIndex, inputValue: inputValue,pointsValue: pointsValue })
     })
         .then(response => {
             if (!response.ok) {
@@ -78,11 +107,12 @@ document.getElementById("send-answer").addEventListener("click", function (event
             if (color == "green") {
                 btnGreen(buttons[index]);
             }
-            buttons[index].style.background = "none";
-            buttons[index].style.backgroundColor = color;
-            buttons[index].disabled = true;
+            else{
+                btnRed(buttons[index]);
+            }
 
             // Закрываем окно
+            document.getElementById("answer-input").value = ""
             document.getElementById("modal-window-question").classList.remove("open");
         })
         .catch(error => {
@@ -90,7 +120,17 @@ document.getElementById("send-answer").addEventListener("click", function (event
         });
 });
 
+
+function btnRed(btn){
+    btn.style.background = "none";
+    btn.style.backgroundColor = "red";
+    btn.disabled = true;
+}
+
 function btnGreen(btn) {
+    btn.style.background = "none";
+    btn.style.backgroundColor = "green";
+    btn.disabled = true;
     var inputValue = document.getElementById("count-point").innerHTML
     inputValue = parseInt(inputValue)
     var PointsValue = parseInt(btn.innerHTML[0])
@@ -121,7 +161,5 @@ function checkCells(cellCnt) {
         AddBonus()
     }
 }
-
-
 
 
