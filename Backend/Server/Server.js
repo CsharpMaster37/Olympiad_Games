@@ -85,7 +85,7 @@ app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
         res.status(500).send('Ошибка при загрузке пользователей.');
     }
 });
-app.get('/admin/:id/delete', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+app.get('/admin/:id/user_delete', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const userId = req.params.id;
         await Users.findByIdAndDelete(userId);
@@ -95,6 +95,50 @@ app.get('/admin/:id/delete', checkAuthenticatedLogAndRegAndAdmin, async (req, re
         res.status(500).send('Ошибка при удалении пользователя.');
     }
 });
+app.get('/admin/:id/progress_delete_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await Users.findById(userId)
+        user.gameProgress.square.values = []
+        user.gameProgress.square.score = 0
+        await user.save();
+        res.redirect('/admin');
+    } catch (err) {
+        console.error('Ошибка при удалении прогресса:', err);
+        res.status(500).send('Ошибка при удалении прогресса.');
+    }
+});
+app.get('/admin/:id/progress_delete_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await Users.findById(userId)
+        user.gameProgress.carousel.values = []
+        user.gameProgress.carousel.score = 0
+        await user.save();
+        res.redirect('/admin');
+    } catch (err) {
+        console.error('Ошибка при удалении прогресса:', err);
+        res.status(500).send('Ошибка при удалении прогресса.');
+    }
+});
+app.get('/admin/progress_delete_carousel_all',checkAuthenticatedLogAndRegAndAdmin, async (req, res) =>{
+    const users = await Users.find();
+    users.forEach(user => {
+        user.gameProgress.carousel.values = []
+        user.gameProgress.carousel.score = 0
+        user.save()
+    });
+    res.redirect('/admin');
+})
+app.get('/admin/progress_delete_square_all',checkAuthenticatedLogAndRegAndAdmin, async (req, res) =>{
+    const users = await Users.find();
+    users.forEach(user => {
+        user.gameProgress.square.values = []
+        user.gameProgress.square.score = 0
+        user.save()
+    });
+    res.redirect('/admin');
+})
 app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const userId = req.params.id;
@@ -104,6 +148,9 @@ app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
         console.error('Ошибка при загрузке формы редактирования пользователя:', err);
         res.status(500).send('Ошибка при загрузке формы редактирования пользователя.');
     }
+});
+app.get('/:id/upload_results', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    
 });
 app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
@@ -160,6 +207,11 @@ app.post('/sendAnswer_Square', (req, res) => {
 app.get('/getProgress_square', (req, res) => {
     res.json(req.user.gameProgress.square);
 });
+app.post('/addbonus_square', (req,res) => {
+    const { score } = req.body
+    req.user.gameProgress.square.score += score
+    req.user.save()
+})
 app.post('/signup', async (req, res) => {
     try {
         const { username, password, confirm_password } = req.body

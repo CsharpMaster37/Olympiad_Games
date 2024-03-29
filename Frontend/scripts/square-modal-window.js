@@ -5,7 +5,9 @@ var rowIndex = 0;
 var cellIndex = 0;
 let rowsCount = [0, 0, 0, 0, 0, 0]
 let cellsCount = [0, 0, 0, 0, 0, 0]
-getProgress()
+document.addEventListener('DOMContentLoaded', () => {
+    getProgress();
+});
 //Закрытие модального окна
 document.getElementById("close-button-modal-window").addEventListener("click",
     function () {
@@ -26,19 +28,21 @@ function getProgress(){
         var i = 0
         data.values.forEach(element => {
             if(element != null)
-                btnForProgress(buttons[i], element > 0 ? "Green":"Red")
+            {
+                rowIndex = Math.floor(i / 5) + 1; // Вычисляем индекс строки
+                cellIndex = i % 5 + 1; // Вычисляем индекс столбца
+                if(element > 0)
+                    btnGreen(buttons[i])
+                else
+                    btnRed(buttons[i])
+            }
             i++
         });
+        document.getElementById("load").style.display = "none"
     })
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
     });
-}
-
-function btnForProgress(btn,color){
-    btn.style.background = "none";
-    btn.style.backgroundColor = color;
-    btn.disabled = true;
 }
 
 //Открытие модального окна
@@ -144,9 +148,20 @@ function btnGreen(btn) {
 
 function AddBonus() {
     var inputValue = document.getElementById("count-point").innerHTML
+    var score = 30
     inputValue = parseInt(inputValue)
-    inputValue += 30
+    inputValue += score
     document.getElementById("count-point").innerHTML = inputValue
+    /* fetch('/addbonus_square', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ score: score })
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    }); */
 }
 
 function checkRow(rowCnt) {
