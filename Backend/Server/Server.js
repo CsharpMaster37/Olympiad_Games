@@ -50,20 +50,7 @@ const start = async () => {
     }
 };
 start();
-const staticPaths = [
-    'Frontend',
-    'Frontend/Rating',
-    'Frontend/Common_Elements',
-    'Frontend/Square_game',
-    'Frontend/Carousel_game',
-    'Frontend/Register',
-    'Frontend/Login',
-    'Frontend/Main',
-    'Frontend/AdminPanel'
-];
-staticPaths.forEach(path => {
-    app.use(express.static(path));
-});
+app.use(express.static('Frontend'));
 const createPath = (page) => path.resolve('Frontend', `${page}.ejs`);
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.isAuthenticated();
@@ -75,24 +62,24 @@ app.get('/topics_square', (req, res) => {
     res.json(topics);
 });
 app.get('/', (req, res) => {
-    res.render(createPath('Main/index'));
+    res.render(createPath('views/main'));
 });
 app.get('/square', checkAuthenticated, (req, res) => {
-    res.render(createPath('Square_game/game_index'), { topics: topics });
+    res.render(createPath('views/square-game'), { topics: topics });
 });
 app.get('/carousel', checkAuthenticated, (req, res) => {
-    res.render(createPath('Carousel_game/index_MathematicalCarousel'));
+    res.render(createPath('views/carousel-game'));
 });
 app.get('/signup', checkAuthenticatedLogAndReg, (req, res) => {
-    res.render(createPath('Register/registration'), { error_message: null });
+    res.render(createPath('views/registration'), { error_message: null });
 });
 app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
-    res.render(createPath('Login/login'), { error_message: null });
+    res.render(createPath('views/login'), { error_message: null });
 });
 app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const users = await Users.find();
-        res.render(createPath('AdminPanel/admin'), { users: users });
+        res.render(createPath('views/admin'), { users: users });
     } catch (err) {
         console.error('Ошибка при получении списка пользователей:', err);
         res.status(500).send('Ошибка при загрузке пользователей.');
@@ -108,11 +95,11 @@ app.get('/admin/:id/delete', checkAuthenticatedLogAndRegAndAdmin, async (req, re
         res.status(500).send('Ошибка при удалении пользователя.');
     }
 });
-app.get('/admin/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const userId = req.params.id;
         const user = await Users.findById(userId);
-        res.render(createPath('AdminPanel/admin_edit_user'), { user: user });
+        res.render(createPath('views/admin_edit_user'), { user: user });
     } catch (err) {
         console.error('Ошибка при загрузке формы редактирования пользователя:', err);
         res.status(500).send('Ошибка при загрузке формы редактирования пользователя.');
@@ -131,7 +118,7 @@ app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, r
     }
 });
 app.get('/admin/add', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
-    res.render(createPath('AdminPanel/admin_add_user'));
+    res.render(createPath('views/admin_add_user'));
 });
 app.post('/admin/add', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
@@ -150,7 +137,7 @@ app.post('/admin/add', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => 
     }
 });
 app.get('/rating', checkAuthenticated, (req, res) => {
-    res.render(createPath('Rating/rating'));
+    res.render(createPath('views/rating'));
 });
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
@@ -177,20 +164,20 @@ app.post('/signup', async (req, res) => {
     try {
         const { username, password, confirm_password } = req.body
         if (username == '') {
-            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Введите имя пользователя!' });
+            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Введите имя пользователя!' });
         }
         if (password == '') {
-            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Введите пароль!' });
+            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Введите пароль!' });
         }
         if (confirm_password == '') {
-            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Введите повторение пароля!' });
+            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Введите повторение пароля!' });
         }
         if (password != confirm_password) {
-            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Пароли не совпадают!' });
+            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Пароли не совпадают!' });
         }
         const candidate = await Users.findOne({ username })
         if (candidate) {
-            return res.render(path.join(__dirname, '/../../Frontend/Register/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
+            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
         }
         const hashPassword = bcrypt.hashSync(password, 7);
         const user = new Users({ username, password: hashPassword, role: 'USER' })

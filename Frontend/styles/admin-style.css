@@ -45,6 +45,7 @@ thead th:nth-child(3) {
     justify-content: center;
     display: flex;
     margin-right: 1%;
+    font-weight: 500;
 }
 
 .ref-edit:hover{
