@@ -10,18 +10,20 @@
             <%- include('com-header.ejs') %>
             <main class="main">
                 <div class="col-sm-12">
-                    <h2>Добавить нового пользователя</h2>
-                    <form action="/admin/add" method="POST">
-                        <div class="form-group">
-                            <label for="username">Имя пользователя</label>
-                            <input type="text" id="username" name="username" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Пароль</label>
-                            <input type="password" id="password" name="password" required>
-                        </div>
-                        <button type="submit">Добавить пользователя</button>
-                    </form>
+                    <div class="wrapper-admin">
+                        <h4>Добавить пользователя</h4>
+                        <form action="/admin/add" method="POST">
+                            <div class="form-group">
+                                <label for="username">Имя пользователя</label>
+                                <input type="text" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Новые пароль</label>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+                            <button type="submit">Добавить пользователя</button>
+                        </form>
+                    </div>                    
                 </div>
             </main>
             <%- include('com-footer.ejs') %>

@@ -49,10 +49,49 @@ thead th:nth-child(3) {
 }
 
 .ref-edit:hover{
-    background-color: #02415d;
+    background-color: #1887b7;
 }
 
 .actions-container {
     display: flex;
     flex-direction: row;
 }
+
+.wrapper-admin{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 7%;
+}
+
+.form-group {
+    margin-bottom: 5%; /* добавляет пространство между элементами формы */
+}
+
+.form-group label {
+    font-weight: bold; /* делает метки (label) жирными */
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%; /* заставляет текстовые поля занимать всю доступную ширину */
+    padding: 2%; /* добавляет отступы вокруг текстовых полей */
+    border: 1px solid #ccc; /* добавляет границу вокруг текстовых полей */
+    border-radius: 5px; /* добавляет скругленные углы текстовых полей */
+}
+
+.wrapper-admin button[type="submit"] {
+    background-color:transparent;
+    color:#000000;
+    padding: 2% 4%; /* добавляет отступы вокруг текста кнопки */
+    border: none; /* удаляет границу кнопки */
+    border-radius: 5px; /* добавляет скругленные углы кнопки */
+    cursor: pointer; /* изменяет курсор при наведении на кнопку */
+    font-weight: 500;
+}
+
+.wrapper-admin button[type="submit"]:hover {
+    background-color: #1887b7; /* изменяет цвет фона кнопки при наведении */
+}
+
