@@ -27,9 +27,8 @@
                               <td>
                                 <div class="actions-container">
                                   <a class="ref-edit" href="/admin/<%= user._id %>/edit">Редактировать</a>
-                                  <form action="/admin/<%= user._id %>?_method=DELETE" method="POST">
-                                      <button class="button-delete" type="submit">Удалить</button>
-                                  </form>
+                                  <!-- <a class="ref-edit" href="/admin/<%= user._id %>/delete">Удалить</a> -->
+                                  <a class="ref-edit" href="#" onclick="confirmDelete('<%= user._id %>')" data-id="<%= user._id %>">Удалить</a>
                                   <a class="ref-edit" href="/admin/<%= user._id %>/remove-prog-carousel">Сброс прогресса карусели</a>
                                   <a class="ref-edit" href="/admin/<%= user._id %>/remove-prog-square">Сброс прогресса квадрата</a>
                                 </div>                                  
@@ -49,5 +48,6 @@
         <%- include('../Common_Elements/footer.ejs') %>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="confirmDelete.js"></script>
   </body>
 </html>

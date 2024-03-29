@@ -4,44 +4,52 @@
 }
 
 .table-users{
-    margin: 1%;
-    width: 100%;
+    table-layout: fixed;
+    width: 96%;    
+    margin: 2%;
 }
 
 .table-users th, .table-users td {
-    border: 2px solid #000000;
     padding: 0.5%;
-    width: auto;
-    white-space: nowrap
+    border-collapse: collapse;
+    border: 2px solid #000000;
 }
 
-.button-delete {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
+thead th:nth-child(1) {
+    width: 36%;
+}
+
+thead th:nth-child(2) {
+    width: 10%;
+}
+
+thead th:nth-child(3) {
+    width: 50%;
 }
 
 .href-container{
     display: flex;
     flex-direction: column;
-}
-
-.button-delete:hover {
-    background-color: #0056b3;
+    margin-left: 2%;
+    width: 18%;
 }
 
 .ref-edit{
+    color:#000000;
     text-decoration: none;
-    margin: 0.5%;
+    border-radius: 10px;
+    transition: .5s;
+    background-color: transparent;    
+    padding: 4px 4px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-right: 1%;
 }
 
-.ref-edit, .button-delete {
-    margin-right: 1%;
-} 
+.ref-edit:hover{
+    background-color: #02415d;
+}
 
 .actions-container {
     display: flex;

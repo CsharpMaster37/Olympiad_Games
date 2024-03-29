@@ -98,7 +98,7 @@ app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
         res.status(500).send('Ошибка при загрузке пользователей.');
     }
 });
-app.delete('/admin/:id', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+app.get('/admin/:id/delete', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const userId = req.params.id;
         await Users.findByIdAndDelete(userId);
@@ -160,11 +160,11 @@ app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', 
 app.post('/sendAnswer_Square', (req, res) => {
     const { rowIndex, cellIndex, inputValue, pointsValue } = req.body
     var answer = (inputValue == topics[rowIndex - 1].questions[cellIndex - 1].answer)
-    if(answer){
+    if (answer) {
         req.user.gameProgress.square.values[(rowIndex - 1) * 5 + (cellIndex - 1)] = pointsValue
-        req.user.gameProgress.square.score+=pointsValue
+        req.user.gameProgress.square.score += pointsValue
     }
-    else{
+    else {
         req.user.gameProgress.square.values[(rowIndex - 1) * 5 + (cellIndex - 1)] = 0
     }
     req.user.save()
