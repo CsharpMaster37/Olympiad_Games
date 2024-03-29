@@ -13,6 +13,7 @@
     padding: 0.5%;
     border-collapse: collapse;
     border: 2px solid #000000;
+    text-align: center;
 }
 
 thead th:nth-child(1) {
@@ -50,11 +51,6 @@ thead th:nth-child(3) {
 
 .ref-edit:hover{
     background-color: #1887b7;
-}
-
-.actions-container {
-    display: flex;
-    flex-direction: row;
 }
 
 .wrapper-admin{

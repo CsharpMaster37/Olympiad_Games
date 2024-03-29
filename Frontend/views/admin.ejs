@@ -16,7 +16,7 @@
                       <tr>
                           <th scope="col">Имя пользователя</th>
                           <th scope="col">Роль</th>
-                          <th scope="col">Действия</th>
+                          <th colspan="4" scope="col">Действия</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -24,15 +24,10 @@
                           <tr>
                               <td><%= user.username %></td>
                               <td><%= user.role %></td>
-                              <td>
-                                <div class="actions-container">
-                                  <a class="ref-edit" href="/<%= user._id %>/edit">Редактировать</a>
-                                  <!-- <a class="ref-edit" href="/admin/<%= user._id %>/delete">Удалить</a> -->
-                                  <a class="ref-edit" href="#" onclick="confirmDelete('<%= user._id %>')" data-id="<%= user._id %>">Удалить</a>
-                                  <a class="ref-edit" href="/admin/<%= user._id %>/remove-prog-carousel">Сброс прогресса карусели</a>
-                                  <a class="ref-edit" href="/admin/<%= user._id %>/remove-prog-square">Сброс прогресса квадрата</a>
-                                </div>                                  
-                              </td>
+                              <td><a class="ref-edit" href="/<%= user._id %>/edit">Редактировать</a></td>
+                              <td><a class="ref-edit" href="#" onclick="confirmDelete('<%= user._id %>')" data-id="<%= user._id %>">Удалить</a></td>
+                              <td><a class="ref-edit" href="/admin/<%= user._id %>/remove-prog-carousel">Сброс прогресса карусели</a></td>
+                              <td><a class="ref-edit" href="/admin/<%= user._id %>/remove-prog-square">Сброс прогресса квадрата</a></td>
                           </tr>
                       <% }); %>
                   </tbody>
