@@ -42,9 +42,9 @@
                               <td><%= user.username %></td>
                               <td><%= user.role %></td>
                               <td><a class="ref-edit" href="/<%= user._id %>/edit">Редактировать</a></td>
-                              <td><a class="ref-edit" href="#" onclick="confirmDelete_user('<%= user._id %>')" data-id="<%= user._id %>">Удалить</a></td>
-                              <td><a class="ref-edit" href="#" onclick="confirmDelete_progress_carousel('<%= user._id %>')" data-id="<%= user._id %>">Сброс прогресса карусели</a></td>
-                              <td><a class="ref-edit" href="#" onclick="confirmDelete_progress_square('<%= user._id %>')" data-id="<%= user._id %>">Сброс прогресса квадрата</a></td>
+                              <td><a class="ref-edit" href="#" onclick="confirmDelete_user('<%= user._id %>', '<%= user.username %>')" data-id="<%= user._id %>">Удалить</a></td>
+                              <td><a class="ref-edit" href="#" onclick="confirmDelete_progress_carousel('<%= user._id %>', '<%= user.username %>')" data-id="<%= user._id %>">Сброс прогресса карусели</a></td>
+                              <td><a class="ref-edit" href="#" onclick="confirmDelete_progress_square('<%= user._id %>', '<%= user.username %>')" data-id="<%= user._id %>">Сброс прогресса квадрата</a></td>
                               <td><a class="ref-edit" href="/<%= user._id %>/upload_results">Выгрузить результаты</a></td>
                           </tr>
                       <% }); %>
