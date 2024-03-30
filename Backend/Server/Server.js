@@ -11,11 +11,12 @@ const Roles = require('../Models/Roles');
 const path = require('path');
 const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
-const questionModule = require('./data');
+const questionModule_square = require('./data-square');
+const questionModule_carousel = require('./data-carousel');
 const app = express();
 const PORT = 3000;
 const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
-var topics = questionModule.getTopics();
+var topics = questionModule_square.getTopics();
 const store = new MongoStore({
     collection: 'Sessions',
     uri: MONGOBD_URI
@@ -60,6 +61,17 @@ app.use((req, res, next) => {
 });
 app.get('/topics_square', (req, res) => {
     res.json(topics);
+});
+app.get('/getDataTable_carousel', (req, res) => {
+    var questions = questionModule_carousel.questions.map(questions => questions.question);
+    res.json({
+        total_questions: questionModule_carousel.total_questions,
+        score_first_question: questionModule_carousel.score_first_question,
+        questions: questions,
+        gameProgress: req.user.gameProgress.carousel,
+        score_failure: questionModule_carousel.score_failure,
+        score_success: questionModule_carousel.score_success
+    });
 });
 app.get('/', (req, res) => {
     res.render(createPath('views/main'));
@@ -197,7 +209,7 @@ app.get('/rating_carousel', checkAuthenticated, async (req, res) => {
     try {
         const users = await Users.find({}, 'username gameProgress.carousel'); // Находим всех пользователей и выбираем только их имена и прогресс игр
         const progress = users.map(user => ({ username: user.username, carouselProgress: user.gameProgress.carousel })); // Формируем массив объектов с именем пользователя и их прогрессом       
-        res.render(createPath('views/rating_carousel'), { progress: progress, href: 'rating_carousel' });
+        res.render(createPath('views/rating_carousel'), { progress: progress, href: 'rating_carousel', count: questionModule_carousel.total_questions });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
@@ -230,6 +242,20 @@ app.post('/sendAnswer_Square', (req, res) => {
     }
     req.user.save()
     res.json(answer)
+});
+app.post('/sendAnswer_Carousel', (req, res) => {
+    const { idxQuestion, answerUser, pointsValue } = req.body
+    var answer = answerUser === questionModule_carousel.questions[idxQuestion].answer
+    req.user.gameProgress.carousel.values[idxQuestion] = answer ? pointsValue : 0
+    req.user.gameProgress.carousel.score += answer ? pointsValue : 0
+    req.user.save()
+    res.json({
+        answer: answer,
+        total_questions: questionModule_carousel.total_questions,
+        score_failure: questionModule_carousel.score_failure,
+        score_success: questionModule_carousel.score_success,
+        question: questionModule_carousel.questions[idxQuestion + 1].question
+    })
 });
 app.get('/getProgress_square', (req, res) => {
     res.json(req.user.gameProgress.square);

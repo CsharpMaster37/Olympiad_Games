@@ -20,11 +20,11 @@
                   <table class="progress-table">
                     <thead>
                       <tr>
-                        <th colspan="26"><%= user.username %></th>
+                        <th colspan="<%= count + 1 %>"><%= user.username %></th>
                       </tr>
                       <tr>
                         <th>Сумма</th>
-                        <% for (let i = 1; i <= 25; i++) { %>
+                        <% for (let i = 1; i <= count; i++) { %>
                           <th><%= i %></th>
                         <% } %>
                       </tr>
@@ -36,7 +36,7 @@
                             <%= user.carouselProgress.score %>
                           <% } %>
                         </td>
-                        <% for (let i = 1; i <= 25; i++) { %>
+                        <% for (let i = 1; i <= count; i++) { %>
                           <td><%= user.carouselProgress.values[i - 1] %></td>
                         <% } %>
                       </tr>

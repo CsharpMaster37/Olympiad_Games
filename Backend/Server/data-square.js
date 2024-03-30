@@ -1,4 +1,4 @@
-var _data = require('./../Data/Questions_Square.json');
+var _data = require('../Data/Questions_Square.json');
 
 var topics = _data.topics.map(topic => topic.topic);
 // Функция для получения темы по индексу
