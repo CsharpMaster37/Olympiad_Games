@@ -78,7 +78,7 @@ app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
 });
 app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
-        const users = await Users.find();
+        const users = await Users.find({}, 'username role');
         res.render(createPath('views/admin'), { users: users });
     } catch (err) {
         console.error('Ошибка при получении списка пользователей:', err);
@@ -121,7 +121,7 @@ app.get('/admin/:id/progress_delete_carousel', checkAuthenticatedLogAndRegAndAdm
         res.status(500).send('Ошибка при удалении прогресса.');
     }
 });
-app.get('/admin/progress_delete_carousel_all',checkAuthenticatedLogAndRegAndAdmin, async (req, res) =>{
+app.get('/admin/progress_delete_carousel_all', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     const users = await Users.find();
     users.forEach(user => {
         user.gameProgress.carousel.values = []
@@ -130,7 +130,7 @@ app.get('/admin/progress_delete_carousel_all',checkAuthenticatedLogAndRegAndAdmi
     });
     res.redirect('/admin');
 })
-app.get('/admin/progress_delete_square_all',checkAuthenticatedLogAndRegAndAdmin, async (req, res) =>{
+app.get('/admin/progress_delete_square_all', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     const users = await Users.find();
     users.forEach(user => {
         user.gameProgress.square.values = []
@@ -150,7 +150,7 @@ app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     }
 });
 app.get('/:id/upload_results', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
-    
+
 });
 app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
@@ -183,8 +183,35 @@ app.post('/admin/add', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => 
         res.status(500).send('Ошибка при добавлении нового пользователя.');
     }
 });
-app.get('/rating', checkAuthenticated, (req, res) => {
-    res.render(createPath('views/rating'));
+app.get('/rating_square', checkAuthenticated, async (req, res) => {
+    try {
+        const users = await Users.find({}, 'username gameProgress.square');
+        const progress = users.map(user => ({ username: user.username, squareProgress: user.gameProgress.square }));
+        res.render(createPath('views/rating_square'), { progress: progress, href: 'rating_square' });
+    } catch (err) {
+        console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
+        res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
+    }
+});
+app.get('/rating_carousel', checkAuthenticated, async (req, res) => {
+    try {
+        const users = await Users.find({}, 'username gameProgress.carousel'); // Находим всех пользователей и выбираем только их имена и прогресс игр
+        const progress = users.map(user => ({ username: user.username, carouselProgress: user.gameProgress.carousel })); // Формируем массив объектов с именем пользователя и их прогрессом       
+        res.render(createPath('views/rating_carousel'), { progress: progress, href: 'rating_carousel' });
+    } catch (err) {
+        console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
+        res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
+    }
+});
+app.get('/rating_all', checkAuthenticated, async (req, res) => {
+    try {
+        const users = await Users.find({}, 'username gameProgress.square.score gameProgress.carousel.score'); // Находим всех пользователей и выбираем только их имена и прогресс игр
+        const progress = users.map(user => ({ username: user.username, squareProgressScore: user.gameProgress.square.score, carouselProgressScore: user.gameProgress.carousel.score })); // Формируем массив объектов с именем пользователя и их прогрессом       
+        res.render(createPath('views/rating_all'), { progress: progress, href: 'rating_all' });
+    } catch (err) {
+        console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
+        res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
+    }
 });
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
@@ -207,7 +234,9 @@ app.post('/sendAnswer_Square', (req, res) => {
 app.get('/getProgress_square', (req, res) => {
     res.json(req.user.gameProgress.square);
 });
-app.post('/addbonus_square', (req,res) => {
+
+
+app.post('/addbonus_square', (req, res) => {
     const { score } = req.body
     req.user.gameProgress.square.score += score
     req.user.save()

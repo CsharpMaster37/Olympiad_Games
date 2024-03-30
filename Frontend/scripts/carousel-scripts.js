@@ -341,3 +341,4 @@ document.getElementById('button-form-answer').addEventListener('click', function
     idxQuestion++;
     labelQuestion.innerHTML = questions[idxQuestion].question
 })
+

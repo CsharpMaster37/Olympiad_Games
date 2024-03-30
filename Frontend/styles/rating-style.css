@@ -1,0 +1,49 @@
+.progress-table {
+    width: 98%;
+    border-collapse: collapse;
+    margin: 1%;
+    white-space: nowrap;
+}
+.progress-table th,
+.progress-table td {
+    border: 1px solid #010000;
+    padding: 4px;
+    text-align: center;
+    min-width: 28px;
+    height: 33px;
+}
+
+.wrapper-rating {
+    overflow-x: auto;
+    height: calc(100vh - 66px); /* Высота обертки, например, на 100px меньше высоты окна браузера */
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper-rating-href{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.button-rating{
+    margin: 1% 1% 0% 1%;
+    color:#000000;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: .5s;
+    background-color: transparent;    
+    padding: 4px 4px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.button-rating:hover{
+    background-color: #1887b7;
+}
+
+.active{
+    background-color: #1887b7;
+}
