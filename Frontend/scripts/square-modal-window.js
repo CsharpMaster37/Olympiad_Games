@@ -32,9 +32,9 @@ function getProgress(){
                 rowIndex = Math.floor(i / 5) + 1; // Вычисляем индекс строки
                 cellIndex = i % 5 + 1; // Вычисляем индекс столбца
                 if(element > 0)
-                    btnGreen(buttons[i])
+                    btnGreen(buttons[i], true)
                 else
-                    btnRed(buttons[i])
+                    btnRed(buttons[i], true)
             }
             i++
         });
@@ -64,16 +64,13 @@ for (let i = 0; i < buttons.length; ++i) {
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById("question").textContent = data[rowIndex - 1].questions[cellIndex - 1].question
+                    document.getElementById("question").textContent = data[rowIndex - 1].questions[cellIndex - 1].question                  
                 })
                 .catch(error => {
                     console.error('There has been a problem with your fetch operation:', error);
                 });
-            document.getElementById("modal-window-question").classList.add("open");    
+            document.getElementById("modal-window-question").classList.add("open");
             document.getElementById("send-answer").addEventListener("click", function () {
-                // Установка значений rowIndex и cellIndex для скрытых полей
-                document.getElementById("rowIndexInput").value = rowIndex;
-                document.getElementById("cellIndexInput").value = cellIndex;
             });
         }
     );
@@ -84,10 +81,6 @@ document.getElementById("send-answer").addEventListener("click", function (event
 
     // Получаем значение из input
     var inputValue = document.getElementById("answer-input").value;
-
-    // Установка значений rowIndex и cellIndex для скрытых полей
-    document.getElementById("rowIndexInput").value = rowIndex;
-    document.getElementById("cellIndexInput").value = cellIndex;
     var pointsValue = parseInt(buttons[(rowIndex - 1) * 5 + (cellIndex - 1)].innerHTML[0])*10
     // Отправка данных на сервер
     fetch('/sendAnswer_Square', {
@@ -109,10 +102,10 @@ document.getElementById("send-answer").addEventListener("click", function (event
             var index = (rowIndex - 1) * 5 + (cellIndex - 1);
             // Применяем изменения к кнопке
             if (color == "green") {
-                btnGreen(buttons[index]);
+                btnGreen(buttons[index],false);
             }
             else{
-                btnRed(buttons[index]);
+                btnRed(buttons[index],false);
             }
 
             // Закрываем окно
@@ -125,25 +118,27 @@ document.getElementById("send-answer").addEventListener("click", function (event
 });
 
 
-function btnRed(btn){
+function btnRed(btn,loadProgress){
     btn.style.background = "none";
     btn.style.backgroundColor = "red";
     btn.disabled = true;
 }
 
-function btnGreen(btn) {
+function btnGreen(btn, loadProgress) {
     btn.style.background = "none";
     btn.style.backgroundColor = "green";
     btn.disabled = true;
-    var inputValue = document.getElementById("count-point").innerHTML
-    inputValue = parseInt(inputValue)
-    var PointsValue = parseInt(btn.innerHTML[0])
-    inputValue += PointsValue * 10
-    document.getElementById("count-point").innerHTML = inputValue
+    if(!loadProgress){
+        var inputValue = document.getElementById("count-point").innerHTML
+        inputValue = parseInt(inputValue)
+        var PointsValue = parseInt(btn.innerHTML[0])
+        inputValue += PointsValue * 10
+        document.getElementById("count-point").innerHTML = inputValue
+    }
     rowsCount[rowIndex]++
     cellsCount[cellIndex]++
-    checkRow(rowsCount[rowIndex])
-    checkCells(cellsCount[cellIndex])
+    checkRow(rowsCount[rowIndex],loadProgress)
+    checkCells(cellsCount[cellIndex],loadProgress)
 }
 
 function AddBonus() {
@@ -152,7 +147,8 @@ function AddBonus() {
     inputValue = parseInt(inputValue)
     inputValue += score
     document.getElementById("count-point").innerHTML = inputValue
-    /* fetch('/addbonus_square', {
+    console.log(loadProgress)
+    fetch('/addbonus_square', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -161,19 +157,21 @@ function AddBonus() {
     })
     .catch((error) => {
         console.error('Error:', error);
-    }); */
+    });
 }
 
-function checkRow(rowCnt) {
+function checkRow(rowCnt,loadProgress) {
     if (rowCnt == 5) {
         table.rows[rowIndex].cells[6].style.backgroundColor = "Green"
-        AddBonus()
+        if(!loadProgress)
+            AddBonus()
     }
 }
-function checkCells(cellCnt) {
+function checkCells(cellCnt,loadProgress) {
     if (cellCnt == 5) {
         table.rows[6].cells[cellIndex].style.backgroundColor = "Green"
-        AddBonus()
+        if(!loadProgress)
+            AddBonus()
     }
 }
 
