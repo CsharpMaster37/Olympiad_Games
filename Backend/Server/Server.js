@@ -149,7 +149,7 @@ app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
         res.status(500).send('Ошибка при загрузке формы редактирования пользователя.');
     }
 });
-app.get('/:id/upload_results', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+app.get('/upload_results_all', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
 
 });
 app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
