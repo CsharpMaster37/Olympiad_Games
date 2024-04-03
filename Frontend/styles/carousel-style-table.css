@@ -85,7 +85,8 @@
     font-weight: 500;
     align-self: self-start;
     color: black;
-    margin-left: 2.1%;
+    width: 70%;
+    word-wrap: break-word;
 }
 
 #input-answer{

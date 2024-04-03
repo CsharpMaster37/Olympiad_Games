@@ -7,6 +7,7 @@ var score_first_question
 var score_current_question
 var idxQuestion = 0;
 var sendButton = document.getElementById('button-form-answer')
+var total_questions;
 crateTable()
 function crateTable() {
     fetch('/getDataTable_carousel')
@@ -17,8 +18,9 @@ function crateTable() {
             return response.json();
         })
         .then(data => {
+            total_questions = data.total_questions
             // Создаем 100 строк и добавляем их в таблицу
-            for (var i = 1; i <= data.total_questions; i++) {
+            for (var i = 1; i <= total_questions; i++) {
                 // Создаем новую строку
                 var row = document.createElement("tr");
 
@@ -39,11 +41,13 @@ function crateTable() {
             }
 
             table.rows[1].cells[1].innerHTML = data.score_first_question
+            labelQuestion.innerHTML = data.questions[0]
+            total_score.innerHTML = data.gameProgress.score
             for (var i = 0; i < data.gameProgress.values.length; i++) {
                 labelQuestion.innerHTML = data.questions[i + 1]
                 if (data.gameProgress.values[i] === 0) {
                     table.rows[i + 1].cells[0].style.backgroundColor = "red"
-                    if (i + 1 < data.total_questions) {
+                    if (i + 1 < total_questions) {
                         table.rows[i + 2].cells[1].innerHTML = parseInt(table.rows[i + 1].cells[1].innerHTML) - data.score_failure
                         if (parseInt(table.rows[i + 2].cells[1].innerHTML) < data.score_first_question) {
                             table.rows[i + 2].cells[1].innerHTML = data.score_first_question
@@ -52,11 +56,12 @@ function crateTable() {
                 }
                 else {
                     table.rows[i + 1].cells[0].style.backgroundColor = "green"
-                    if (i + 1 < data.total_questions) {
+                    if (i + 1 < total_questions) {
                         table.rows[i + 2].cells[1].innerHTML = parseInt(table.rows[i + 1].cells[1].innerHTML) + data.score_success
                     }
                 }
             }
+
 
             getData(data.gameProgress.values.length)
             document.getElementById("load").style.display = "none"
@@ -75,8 +80,27 @@ function incIdxQuestion() {
     idxQuestion++
 }
 
-sendButton.addEventListener('click', function (event) {
+let formIsSubmitting = false; // Флаг для отслеживания отправки формы
+
+sendButton.addEventListener('submit', function (event) {
     event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)
+    // Если форма уже отправляется, игнорируем клик
+    if (formIsSubmitting) {
+        return;
+    }
+
+
+    if (idxQuestion === total_questions) {
+        inputAnswer.value = ''
+        console.log('Тест закончен')
+        return
+    }
+    console.log(idxQuestion)
+    console.log(formIsSubmitting)
+
+    // Устанавливаем флаг отправки формы в true
+    formIsSubmitting = true;
+
     fetch('/sendAnswer_Carousel', {
         method: 'POST',
         headers: {
@@ -91,7 +115,7 @@ sendButton.addEventListener('click', function (event) {
             return response.json();
         })
         .then(data => {
-            sendButton.disabled = true
+
             if (data.answer) {
                 total_score.innerText = Number(total_score.innerText) + score_current_question
                 score_current_question += data.score_success
@@ -107,16 +131,15 @@ sendButton.addEventListener('click', function (event) {
                 table.rows[idxQuestion + 1].cells[0].style.backgroundColor = "red"
             }
             inputAnswer.value = ''
-            if (idxQuestion == data.total_questions - 1) {
-
-                return
+            if (idxQuestion < total_questions - 1) {
+                table.rows[idxQuestion + 2].cells[1].innerHTML = score_current_question
             }
-            table.rows[idxQuestion + 2].cells[1].innerHTML = score_current_question
             labelQuestion.innerHTML = data.question
             incIdxQuestion()
-            sendButton.disabled = false
+
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
+    formIsSubmitting = false; // Сбрасываем флаг отправки формы
 })
