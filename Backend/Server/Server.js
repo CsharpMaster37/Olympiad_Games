@@ -199,6 +199,8 @@ app.get('/rating_square', checkAuthenticated, async (req, res) => {
     try {
         const users = await Users.find({}, 'username gameProgress.square');
         const progress = users.map(user => ({ username: user.username, squareProgress: user.gameProgress.square }));
+        // Сортировка по squareProgress в порядке убывания
+        progress.sort((a, b) => b.squareProgress.score - a.squareProgress.score);
         res.render(createPath('views/rating_square'), { progress: progress, href: 'rating_square' });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
@@ -209,6 +211,8 @@ app.get('/rating_carousel', checkAuthenticated, async (req, res) => {
     try {
         const users = await Users.find({}, 'username gameProgress.carousel'); // Находим всех пользователей и выбираем только их имена и прогресс игр
         const progress = users.map(user => ({ username: user.username, carouselProgress: user.gameProgress.carousel })); // Формируем массив объектов с именем пользователя и их прогрессом       
+        // Сортировка по carouselProgressScore в порядке убывания
+        progress.sort((a, b) => b.carouselProgress.score - a.carouselProgress.score);
         res.render(createPath('views/rating_carousel'), { progress: progress, href: 'rating_carousel', count: questionModule_carousel.total_questions });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
@@ -218,7 +222,14 @@ app.get('/rating_carousel', checkAuthenticated, async (req, res) => {
 app.get('/rating_all', checkAuthenticated, async (req, res) => {
     try {
         const users = await Users.find({}, 'username gameProgress.square.score gameProgress.carousel.score'); // Находим всех пользователей и выбираем только их имена и прогресс игр
-        const progress = users.map(user => ({ username: user.username, squareProgressScore: user.gameProgress.square.score, carouselProgressScore: user.gameProgress.carousel.score })); // Формируем массив объектов с именем пользователя и их прогрессом       
+        const progress = users.map(user => ({
+            username: user.username,
+            squareProgressScore: user.gameProgress.square.score,
+            carouselProgressScore: user.gameProgress.carousel.score,
+            totalProgressScore: user.gameProgress.square.score + user.gameProgress.carousel.score
+        })); // Формируем массив объектов с именем пользователя и их прогрессом      
+        // Сортировка по totalProgressScore в порядке убывания
+        progress.sort((a, b) => b.totalProgressScore - a.totalProgressScore);
         res.render(createPath('views/rating_all'), { progress: progress, href: 'rating_all' });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);

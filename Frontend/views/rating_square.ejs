@@ -12,9 +12,9 @@
             <div class="col-sm-12">              
               <div class="wrapper-rating">
                 <div class="wrapper-rating-href">
+                  <a class="button-rating font-toolbar <%= href === 'rating_all' ? 'active' : '' %>" href="/rating_all" role="button" >Общий</a> 
                   <a class="button-rating font-toolbar <%= href === 'rating_square' ? 'active' : '' %>" href="/rating_square" role="button" >Квадрат</a>
                   <a class="button-rating font-toolbar <%= href === 'rating_carousel' ? 'active' : '' %>" href="/rating_carousel" role="button" >Карусель</a>
-                  <a class="button-rating font-toolbar <%= href === 'rating_all' ? 'active' : '' %>" href="/rating_all" role="button" >Общий</a>      
                 </div>                      
                 <% progress.forEach(user => { %>
                   <table class="progress-table">

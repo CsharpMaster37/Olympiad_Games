@@ -12,9 +12,9 @@
             <div class="col-sm-12">              
               <div class="wrapper-rating">
                 <div class="wrapper-rating-href">
+                  <a class="button-rating font-toolbar <%= href === 'rating_all' ? 'active' : '' %>" href="/rating_all" role="button" >Общий</a>
                   <a class="button-rating font-toolbar <%= href === 'rating_square' ? 'active' : '' %>" href="/rating_square" role="button" >Квадрат</a>
-                  <a class="button-rating font-toolbar <%= href === 'rating_carousel' ? 'active' : '' %>" href="/rating_carousel" role="button" >Карусель</a>
-                  <a class="button-rating font-toolbar <%= href === 'rating_all' ? 'active' : '' %>" href="/rating_all" role="button" >Общий</a>      
+                  <a class="button-rating font-toolbar <%= href === 'rating_carousel' ? 'active' : '' %>" href="/rating_carousel" role="button" >Карусель</a>                        
                 </div>                      
                 
                   <table class="progress-table">
@@ -32,7 +32,7 @@
                         <td><%= user.username %></td>
                         <td><%= user.squareProgressScore %></td>
                         <td><%= user.carouselProgressScore %></td>
-                        <td><%= user.carouselProgressScore + user.squareProgressScore%></td>
+                        <td><%= user.totalProgressScore %></td>
                       </tr>
                       <% }); %>                      
                     </tbody>
