@@ -19,11 +19,7 @@
     width: 100%;
 }
 
-.Info-window p{
-    color: #000000;
-    font-weight: 700;
-    font-size: 30px;
-}
+
 
 .wrapper-score, .wrapper-time{
   display: flex;
@@ -33,11 +29,15 @@
   width: 95%;
   border-radius: 10px;
   padding: 5%;
-  margin-bottom: 10%
+  margin-bottom: 10%;
+  color: #000000;
+  font-weight: 700;
+  font-size: 30px;
 }
 p{
   margin: 0;
 }
+
 
 .count-value
 {

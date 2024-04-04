@@ -17,6 +17,13 @@ const app = express();
 const PORT = 3000;
 const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
 var topics = questionModule_square.getTopics();
+
+var startDate_square = new Date()
+var endDate_square = new Date("2024-04-04 23:57:00")
+
+var startDate_carousel = new Date()
+var endDate_carousel = new Date("2024-05-06 01:00:00")
+
 const store = new MongoStore({
     collection: 'Sessions',
     uri: MONGOBD_URI
@@ -272,6 +279,13 @@ app.get('/getProgress_square', (req, res) => {
     res.json(req.user.gameProgress.square);
 });
 
+
+app.get('/getTimer_carousel', (req,res) =>{
+    res.json({startDate: startDate_carousel, endDate: endDate_carousel})
+})
+app.get('/getTimer_square', (req,res) =>{
+    res.json({startDate: startDate_square, endDate: endDate_square})
+})
 
 app.post('/addbonus_square', (req, res) => {
     const { score } = req.body
