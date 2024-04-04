@@ -84,20 +84,15 @@ let flag = false
 
 sendButton.addEventListener('click', async function (event) {
     event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)    
-
     if (idxQuestion === total_questions) {
         inputAnswer.value = ''
         console.log('Тест закончен')
         return
     }
-
     if (flag) {
         return
     }
-
     flag = true
-    console.log('начало' + idxQuestion)
-
     await fetch('/sendAnswer_Carousel', {
         method: 'POST',
         headers: {
@@ -112,7 +107,6 @@ sendButton.addEventListener('click', async function (event) {
             return response.json();
         })
         .then(data => {
-
             if (data.answer) {
                 total_score.innerText = Number(total_score.innerText) + score_current_question
                 score_current_question += data.score_success
@@ -133,12 +127,9 @@ sendButton.addEventListener('click', async function (event) {
             }
             labelQuestion.innerHTML = data.question
             incIdxQuestion()
-            console.log(data)
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
-
-    console.log('конец' + idxQuestion)
     flag = false
 })

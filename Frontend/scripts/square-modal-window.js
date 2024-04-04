@@ -85,7 +85,7 @@ document.getElementById("send-answer").addEventListener("click", async function 
     // Получаем значение из input
     var inputValue = document.getElementById("answer-input").value;
     var pointsValue = parseInt(buttons[(rowIndex - 1) * 5 + (cellIndex - 1)].innerHTML[0]) * 10
-    document.getElementById("modal-window-question").classList.remove("open");
+
     // Отправка данных на сервер
     await fetch('/sendAnswer_Square', {
         method: 'POST',
@@ -114,11 +114,12 @@ document.getElementById("send-answer").addEventListener("click", async function 
 
             document.getElementById("answer-input").value = ""
             console.log(data)
+            document.getElementById("modal-window-question").classList.remove("open");
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
-    setTimeout(() => flag = false, 1000)
+    setTimeout(() => flag = false, 600)
 });
 
 
