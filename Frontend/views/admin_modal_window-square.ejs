@@ -8,6 +8,19 @@
           </svg>  
         </button>
       </div>
-      <a class="ref-edit button-in-modal" onclick="confirmDelete_progress_square_all()" href="#">Общий сброс прогресса квадрата</a>       
+      <a class="ref-edit button-in-modal" onclick="confirmDelete_progress_square_all()" href="#">Общий сброс прогресса квадрата</a>   
+      <a class="ref-edit button-in-modal" href="/upload_square">Выгрузить результаты в EXCEL</a>
+      <form action="/setTime_square" method="post">
+        <label for="startTimeSquare">Укажите предпочтительную дату события:</label>
+        <div>
+            <label for="startTimeSquare">Начальное время:</label>
+            <input type="datetime-local" id="startTimeSquare" name="startTimeSquare">
+        </div>
+        <div>
+            <label for="endTimeSquare">Конечное время:</label>
+            <input type="datetime-local" id="endTimeSquare" name="endTimeSquare">
+        </div>
+        <button type="submit" id = "button-form-TimeSquare" class = "button-form-answer">Сохранить</button>
+    </form> 
     </div>
   </div>

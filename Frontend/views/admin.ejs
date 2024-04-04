@@ -31,8 +31,7 @@
             <div class="col-sm-12">
               <div class="href-container"> 
                 <a class="ref-edit" href="#" onclick="openModal_square()">Управление квадратом</a>
-                <a class="ref-edit" href="#" onclick="openModal_carousel()">Управление каруселью</a>      
-                <a class="ref-edit" href="/upload_results_all">Выгрузить результаты</a>
+                <a class="ref-edit" href="#" onclick="openModal_carousel()">Управление каруселью</a>        
               </div>
               <p class="user-mgmt-title">Управление пользователями</p>  
               <a class="ref-edit add-users" href="/admin/add">Добавить нового пользователя</a>   
@@ -61,11 +60,9 @@
                               </td>
                               <td>
                                 <a class="ref-edit" href="#" onclick="confirmDelete_progress_square('<%= user._id %>', '<%= user.username %>')" data-id="<%= user._id %>">Сбросить прогресс</a>
-                                <a class="ref-edit" href="/<%= user._id %>/upload_results_square">Выгрузить результаты</a>
                               </td>
                               <td>
                                 <a class="ref-edit" href="#" onclick="confirmDelete_progress_carousel('<%= user._id %>', '<%= user.username %>')" data-id="<%= user._id %>">Сбросить прогресс</a>
-                                <a class="ref-edit" href="/<%= user._id %>/upload_results_carousel">Выгрузить результаты</a>
                               </td>                              
                           </tr>
                       <% }); %>

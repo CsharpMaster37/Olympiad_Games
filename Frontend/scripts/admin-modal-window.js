@@ -1,8 +1,8 @@
-function openModal_carousel(){
+function openModal_carousel() {
     document.getElementById("carousel-admin-modal").classList.add("open");
 }
 
-function openModal_square(){
+function openModal_square() {
     document.getElementById("square-admin-modal").classList.add("open");
 }
 
