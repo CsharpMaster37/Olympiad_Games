@@ -80,28 +80,25 @@ function incIdxQuestion() {
     idxQuestion++
 }
 
-let formIsSubmitting = false; // Флаг для отслеживания отправки формы
+let flag = false
 
-sendButton.addEventListener('submit', function (event) {
-    event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)
-    // Если форма уже отправляется, игнорируем клик
-    if (formIsSubmitting) {
-        return;
-    }
-
+sendButton.addEventListener('click', async function (event) {
+    event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)    
 
     if (idxQuestion === total_questions) {
         inputAnswer.value = ''
         console.log('Тест закончен')
         return
     }
-    console.log(idxQuestion)
-    console.log(formIsSubmitting)
 
-    // Устанавливаем флаг отправки формы в true
-    formIsSubmitting = true;
+    if (flag) {
+        return
+    }
 
-    fetch('/sendAnswer_Carousel', {
+    flag = true
+    console.log('начало' + idxQuestion)
+
+    await fetch('/sendAnswer_Carousel', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -136,10 +133,12 @@ sendButton.addEventListener('submit', function (event) {
             }
             labelQuestion.innerHTML = data.question
             incIdxQuestion()
-
+            console.log(data)
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
-    formIsSubmitting = false; // Сбрасываем флаг отправки формы
+
+    console.log('конец' + idxQuestion)
+    flag = false
 })

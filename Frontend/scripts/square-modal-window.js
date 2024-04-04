@@ -75,15 +75,19 @@ for (let i = 0; i < buttons.length; ++i) {
     );
 }
 
-document.getElementById("send-answer").addEventListener("click", function (event) {
+let flag = false
+document.getElementById("send-answer").addEventListener("click", async function (event) {
     event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)
-
+    if (flag) {
+        return
+    }
+    flag = true
     // Получаем значение из input
     var inputValue = document.getElementById("answer-input").value;
     var pointsValue = parseInt(buttons[(rowIndex - 1) * 5 + (cellIndex - 1)].innerHTML[0]) * 10
+    document.getElementById("modal-window-question").classList.remove("open");
     // Отправка данных на сервер
-    document.getElementById("send-answer").disabled = true
-    fetch('/sendAnswer_Square', {
+    await fetch('/sendAnswer_Square', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -108,15 +112,13 @@ document.getElementById("send-answer").addEventListener("click", function (event
                 btnRed(buttons[index], false);
             }
 
-            // Закрываем окно
             document.getElementById("answer-input").value = ""
-            document.getElementById("modal-window-question").classList.remove("open");
-            document.getElementById("send-answer").disabled = false
+            console.log(data)
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
-
+    setTimeout(() => flag = false, 1000)
 });
 
 
