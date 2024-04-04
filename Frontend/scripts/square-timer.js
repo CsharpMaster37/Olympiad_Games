@@ -1,9 +1,6 @@
 // Объявляем переменную timerInterval в глобальной области видимости
 var timerInterval;
 
-// Переменная для хранения общего количества часов
-var totalHours;
-
 // Функция для обновления таймера
 function updateTimer(startDate, endDate) {
     var currentDate = new Date(); // текущая дата и время
@@ -14,11 +11,13 @@ function updateTimer(startDate, endDate) {
     } else {
         var timeDifference = endDate - currentDate;
 
+        // Переводим разницу в миллисекундах в часы, минуты и секунды
+        var hours = Math.floor(timeDifference / (1000 * 60 * 60));
         var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-        // Обновляем только минуты и секунды
-        var timerDisplay = totalHours + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        // Обновляем таймер с оставшимся временем
+        var timerDisplay = hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
         document.getElementById('timer').innerHTML = timerDisplay;
     }
 }
@@ -29,10 +28,6 @@ fetch('/getTimer_square')
 .then(data => {
     var startDate = new Date(data.startDate);
     var endDate = new Date(data.endDate);
-
-    // Вычисляем общее количество часов при получении данных с сервера
-    var timeDifference = endDate - startDate;
-    totalHours = Math.floor(timeDifference / (1000 * 60 * 60));
 
     // Обновляем таймер сразу после получения данных с сервера
     updateTimer(startDate, endDate);
