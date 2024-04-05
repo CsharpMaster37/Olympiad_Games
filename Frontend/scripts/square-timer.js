@@ -21,7 +21,7 @@ function updateTimer(startDate, endDate) {
     } else if (currentDate >= endDate) {
         document.getElementById('gameover').style.display = 'flex';
         clearInterval(timerInterval);
-        document.getElementById('gameover').innerHTML = 'Игра окончена!';
+        document.getElementById('gameover').innerHTML = 'Игра окончена!';       
     } else {
         document.getElementById('gameover').style.display = 'none';
         var timeDifference = endDate - currentDate;
