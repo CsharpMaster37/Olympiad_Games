@@ -8,7 +8,8 @@ const cookieParser = require('cookie-parser');
 const initializePassport = require('./passport-config');
 const Users = require('../Models/Users');
 const Roles = require('../Models/Roles');
-const Games = require('../Models/Games')
+const SquareGames = require('../Models/SquareGames')
+const Carousel = require('../Models/Carousel')
 const path = require('path');
 const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
@@ -45,7 +46,7 @@ const store = new MongoStore({
 async function getDatesByTitle(title) {
     try {
         // Ищем игру по названию
-        const game = await Games.findOne({ title });
+        const game = await SquareGames.findOne({ title });
 
         // Если игра найдена, возвращаем startDate и endDate, иначе null
         if (game) {
@@ -323,13 +324,13 @@ app.get('/getTimer_square', (req, res) => {
     res.json({ startDate: startDate_square, endDate: endDate_square })
 })
 
-app.post('/setTime_square', async(req, res) => {
+app.post('/setTime_square', async (req, res) => {
     startDate_square = req.body.startTimeSquare;
     endDate_square = req.body.endTimeSquare;
     const title = 'Square'; // Название игры, для которой вы хотите обновить время
     try {
         // Находим и обновляем игру с указанным названием
-        await Games.findOneAndUpdate(
+        await SquareGames.findOneAndUpdate(
             { title: title }, // Условие поиска
             { startDate: startDate_square, endDate: endDate_square } // Новые значения для обновления
         );
@@ -347,7 +348,7 @@ app.post('/setTime_carousel', async (req, res) => {
     const title = 'Carousel'; // Название игры, для которой вы хотите обновить время
     try {
         // Находим и обновляем игру с указанным названием
-        await Games.findOneAndUpdate(
+        await SquareGames.findOneAndUpdate(
             { title: title }, // Условие поиска
             { startDate: startDate_carousel, endDate: endDate_carousel } // Новые значения для обновления
         );
