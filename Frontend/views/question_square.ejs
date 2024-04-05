@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <%- include('com-head.ejs') %>
-    <link rel="stylesheet" href="../styles/admin-style.css"/>
+    <link rel="stylesheet" href="../styles/admin-square-questions.css">
     <title>Вопросы квадрата</title>
 </head>
 <body>
@@ -11,8 +11,35 @@
         <main class="main">        
             <div class="col-sm-12">          
                 <div class="wrapper-table">
-                    <table class="table-question">
-                    </table>  
+                    <form class="form-table" action="/save_square" method="POST"> <!-- Форма для отправки изменений в базу данных -->
+                        <table>
+                            <thead>
+                              <tr>
+                                <th>Тема</th>
+                                <th>Уровень</th>
+                                <th>Вопрос</th>
+                                <th>Ответ</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% topics.forEach(function(topic, topicIndex) { %>
+                                <% topic.questions.forEach(function(question, index) { %>
+                                  <tr>
+                                    <% if (index === 0) { %>
+                                      <td rowspan="<%= topic.questions.length %>">
+                                          <input type="text" name="topics[<%= topicIndex %>][topic]" value="<%= topic.topic %>">
+                                      </td>
+                                    <% } %>
+                                    <td><%= question.level %></td>
+                                    <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][question]" value="<%= question.question %>"></td> <!-- Изменяемый вопрос -->
+                                    <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][answer]" value="<%= question.answer %>"></td> <!-- Изменяемый ответ -->
+                                  </tr>
+                                <% }); %>
+                              <% }); %>
+                            </tbody>
+                          </table>
+                          <button type="submit">Сохранить</button> <!-- Кнопка для отправки изменений -->
+                    </form>
                 </div>
             </div>
         </main>

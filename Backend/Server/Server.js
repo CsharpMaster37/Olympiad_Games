@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const passport = require('passport');
@@ -8,7 +9,9 @@ const cookieParser = require('cookie-parser');
 const initializePassport = require('./passport-config');
 const Users = require('../Models/Users');
 const Roles = require('../Models/Roles');
-const SquareGames = require('../Models/SquareGames')
+const Square = require('../Models/Square')
+var square
+getSquare()
 const Carousel = require('../Models/Carousel')
 const path = require('path');
 const methodOverride = require('method-override');
@@ -20,46 +23,20 @@ const PORT = 3000;
 const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
 var topics = questionModule_square.getTopics();
 
+async function getSquare() {
+    square = await Square.findOne()
+}
 var startDate_square
 var endDate_square
 
 var startDate_carousel
 var endDate_carousel
 
-getDatesByTitle('Square')
-    .then(dates => {
-        startDate_square = dates.startDate
-        endDate_square = dates.endDate
-    });
-
-getDatesByTitle('Square')
-    .then(dates => {
-        startDate_carousel = dates.startDate
-        endDate_carousel = dates.endDate
-    });
-
 const store = new MongoStore({
     collection: 'Sessions',
     uri: MONGOBD_URI
 });
 
-async function getDatesByTitle(title) {
-    try {
-        // Ищем игру по названию
-        const game = await SquareGames.findOne({ title });
-
-        // Если игра найдена, возвращаем startDate и endDate, иначе null
-        if (game) {
-            return { startDate: game.startDate, endDate: game.endDate };
-        } else {
-            return { startDate: null, endDate: null };
-        }
-    } catch (error) {
-        // В случае ошибки выводим ее в консоль и возвращаем null
-        console.error('Ошибка при получении даты игры:', error);
-        return { startDate: null, endDate: null };
-    }
-}
 
 initializePassport(
     passport,
@@ -84,6 +61,14 @@ const start = async () => {
     try {
         await mongoose.connect(MONGOBD_URI);
         app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+        const squareData = await Square.findOne({}).exec();
+        startDate_square = squareData.startDate;
+        endDate_square = squareData.endDate;
+
+        // Получаем данные из базы данных для карусели
+        const carouselData = await Carousel.findOne({}).exec();
+        startDate_carousel = carouselData.startDate;
+        endDate_carousel = carouselData.endDate;
     } catch (e) {
         console.error("Ошибка при запуске сервера:", e);
     }
@@ -292,7 +277,10 @@ app.get('/question_carousel', checkAuthenticated, async (req, res) => {
     res.render(createPath('views/question_carousel'));
 });
 app.get('/question_square', checkAuthenticated, (req, res) => {
-    res.render(createPath('views/question_square'));
+    res.render(createPath('views/question_square'), { topics: square.topics });
+});
+app.post('/save_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    res.redirect('/admin')
 });
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
@@ -341,13 +329,9 @@ app.get('/getTimer_square', (req, res) => {
 app.post('/setTime_square', async (req, res) => {
     startDate_square = req.body.startTimeSquare;
     endDate_square = req.body.endTimeSquare;
-    const title = 'Square'; // Название игры, для которой вы хотите обновить время
     try {
         // Находим и обновляем игру с указанным названием
-        await SquareGames.findOneAndUpdate(
-            { title: title }, // Условие поиска
-            { startDate: startDate_square, endDate: endDate_square } // Новые значения для обновления
-        );
+        await Square.findOneAndUpdate({ startDate: startDate_square, endDate: endDate_square });
         // После успешного обновления перенаправляем пользователя обратно на страницу администратора
         res.redirect('/admin');
     } catch (error) {
@@ -359,13 +343,9 @@ app.post('/setTime_square', async (req, res) => {
 app.post('/setTime_carousel', async (req, res) => {
     startDate_carousel = req.body.startTimeCarousel;
     endDate_carousel = req.body.endTimeCarousel;
-    const title = 'Carousel'; // Название игры, для которой вы хотите обновить время
     try {
         // Находим и обновляем игру с указанным названием
-        await SquareGames.findOneAndUpdate(
-            { title: title }, // Условие поиска
-            { startDate: startDate_carousel, endDate: endDate_carousel } // Новые значения для обновления
-        );
+        await Carousel.findOneAndUpdate({ startDate: startDate_carousel, endDate: endDate_carousel });
         // После успешного обновления перенаправляем пользователя обратно на страницу администратора
         res.redirect('/admin');
     } catch (error) {
