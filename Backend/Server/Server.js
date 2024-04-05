@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const initializePassport = require('./passport-config');
 const Users = require('../Models/Users');
 const Roles = require('../Models/Roles');
+const Games = require('../Models/Games')
 const path = require('path');
 const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
@@ -18,17 +19,46 @@ const PORT = 3000;
 const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
 var topics = questionModule_square.getTopics();
 
-var startDate_square;
-var endDate_square;
+var startDate_square
+var endDate_square
 
-var startDate_carousel;
-var endDate_carousel;
+var startDate_carousel
+var endDate_carousel
+
+getDatesByTitle('Square')
+    .then(dates => {
+        startDate_square = dates.startDate
+        endDate_square = dates.endDate
+    });
+
+getDatesByTitle('Square')
+    .then(dates => {
+        startDate_carousel = dates.startDate
+        endDate_carousel = dates.endDate
+    });
 
 const store = new MongoStore({
     collection: 'Sessions',
     uri: MONGOBD_URI
 });
 
+async function getDatesByTitle(title) {
+    try {
+        // Ищем игру по названию
+        const game = await Games.findOne({ title });
+
+        // Если игра найдена, возвращаем startDate и endDate, иначе null
+        if (game) {
+            return { startDate: game.startDate, endDate: game.endDate };
+        } else {
+            return { startDate: null, endDate: null };
+        }
+    } catch (error) {
+        // В случае ошибки выводим ее в консоль и возвращаем null
+        console.error('Ошибка при получении даты игры:', error);
+        return { startDate: null, endDate: null };
+    }
+}
 
 initializePassport(
     passport,
@@ -287,15 +317,41 @@ app.get('/getTimer_square', (req, res) => {
     res.json({ startDate: startDate_square, endDate: endDate_square })
 })
 
-app.post('/setTime_square', (req, res) => {
+app.post('/setTime_square', async(req, res) => {
     startDate_square = req.body.startTimeSquare;
     endDate_square = req.body.endTimeSquare;
-    res.redirect('/admin')
+    const title = 'Square'; // Название игры, для которой вы хотите обновить время
+    try {
+        // Находим и обновляем игру с указанным названием
+        await Games.findOneAndUpdate(
+            { title: title }, // Условие поиска
+            { startDate: startDate_square, endDate: endDate_square } // Новые значения для обновления
+        );
+        // После успешного обновления перенаправляем пользователя обратно на страницу администратора
+        res.redirect('/admin');
+    } catch (error) {
+        // Если произошла ошибка, выводим ее и отправляем статус ошибки на клиент
+        console.error('Ошибка при обновлении времени для игры:', error);
+        res.status(500).send('Ошибка при обновлении времени для игры');
+    }
 })
-app.post('/setTime_carousel', (req, res) => {
+app.post('/setTime_carousel', async (req, res) => {
     startDate_carousel = req.body.startTimeCarousel;
     endDate_carousel = req.body.endTimeCarousel;
-    res.redirect('/admin')
+    const title = 'Carousel'; // Название игры, для которой вы хотите обновить время
+    try {
+        // Находим и обновляем игру с указанным названием
+        await Games.findOneAndUpdate(
+            { title: title }, // Условие поиска
+            { startDate: startDate_carousel, endDate: endDate_carousel } // Новые значения для обновления
+        );
+        // После успешного обновления перенаправляем пользователя обратно на страницу администратора
+        res.redirect('/admin');
+    } catch (error) {
+        // Если произошла ошибка, выводим ее и отправляем статус ошибки на клиент
+        console.error('Ошибка при обновлении времени для игры:', error);
+        res.status(500).send('Ошибка при обновлении времени для игры');
+    }
 })
 
 app.post('/addbonus_square', (req, res) => {
