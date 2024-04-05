@@ -96,15 +96,15 @@
     text-align: center;
 }
 
-thead th:nth-child(1) {
+.table-users thead th:nth-child(1) {
     width: 36%;
 }
 
-thead th:nth-child(2) {
+.table-users thead th:nth-child(2) {
     width: 10%;
 }
 
-thead th:nth-child(3) {
+.table-users thead th:nth-child(3) {
     width: 50%;
 }
 
@@ -209,15 +209,15 @@ thead th:nth-child(3) {
     text-align: center;
 }
 
-thead th:nth-child(1) {
+.table-question thead th:nth-child(1) {
     width: 6%;
 }
 
-thead th:nth-child(2) {
+.table-question thead th:nth-child(2) {
     width: 55%;
 }
 
-thead th:nth-child(3) {
+.table-question thead th:nth-child(3) {
     width: 39%;
 }
 
