@@ -274,7 +274,21 @@ app.get('/rating_all', checkAuthenticated, async (req, res) => {
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
     }
 });
-app.get('/question_carousel', checkAuthenticated, (req, res) => {
+app.post('/save_question_carousel', checkAuthenticated, async (req, res) => {
+    await Carousel.findOneAndUpdate({
+        score_first_question: req.body.score_first_question,
+        score_failure: req.body.score_failure,
+        score_success: req.body.score_success,
+        total_questions: req.body.total_questions,
+        questions: req.body.questions
+    });
+    res.redirect('/question_carousel');
+});
+app.get('/get_question_carousel', checkAuthenticated, async (req, res) => {
+    const questionsData = await Carousel.findOne({}, 'score_first_question score_failure score_success total_questions questions')
+    res.json(questionsData);
+});
+app.get('/question_carousel', checkAuthenticated, async (req, res) => {
     res.render(createPath('views/question_carousel'));
 });
 app.get('/question_square', checkAuthenticated, (req, res) => {

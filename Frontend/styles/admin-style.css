@@ -75,7 +75,7 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 1); /* Прозрачность задника */
     z-index: 1050; /* Значение z-index должно быть выше, чем у модального окна */
-  }
+}
 
 
 .wrapper-table{
@@ -131,7 +131,7 @@ thead th:nth-child(3) {
     font-size: 25px;
 }
 
-.add-users{
+.add-users, .save-questions{
     justify-content: left;
     width: 20%;
     margin-left: 2%;
@@ -194,5 +194,61 @@ thead th:nth-child(3) {
 
 .wrapper-admin button[type="submit"]:hover {
     background-color: #1887b7; /* изменяет цвет фона кнопки при наведении */
+}
+
+/* Стили для таблицы */
+.table-question {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-question th, .table-question td {
+    padding: 0.3%;
+    border-collapse: collapse;
+    border: 2px solid #000000;
+    text-align: center;
+}
+
+thead th:nth-child(1) {
+    width: 6%;
+}
+
+thead th:nth-child(2) {
+    width: 55%;
+}
+
+thead th:nth-child(3) {
+    width: 39%;
+}
+
+/* Стили для полей формы */
+.question-form {
+    margin: 1%;
+}
+
+.question-form div {
+    margin-bottom: 10px;
+}
+
+.question-form label {
+    display: inline-block;
+    width: 20%; /* Ширина метки */
+}
+
+.question-form input[type="number"] {
+    width: 5%;
+    background-color: transparent;
+    border: 1px solid #000000;
+}
+
+.question-form input[type="text"] {
+    width: 100%;    
+    border: none;
+    background-color: transparent;
+}
+
+.question-form input[type="number"]:focus,
+.question-form input[type="text"]:focus {
+    outline: none;
 }
 

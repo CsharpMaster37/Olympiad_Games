@@ -25,10 +25,17 @@ const Carousel = new Schema({
         type: Number,
         required: true
     },
-    questions: {
-        type: [Number],
-        required: true
+    questions: [{
+        question: {
+            type: String,
+            required: true
+        },
+        answer: {
+            type: Schema.Types.Mixed,
+            required: true
+        }
     }
+    ]
 }, { versionKey: false });
 
 module.exports = model('Carousel', Carousel, 'Carousel')
