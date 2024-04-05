@@ -32,3 +32,11 @@ const squareSchema = new Schema({
 }, { versionKey: false });
 
 module.exports = model('Square', squareSchema, 'Square')
+
+/* const Square = model('Square', squareSchema);
+
+// Загрузка JSON-файла
+const jsonData = require('./../Data/Questions_Square.json'); // Путь к вашему JSON-файлу
+
+// Сохранение данных из JSON в MongoDB
+Square.create(jsonData) */

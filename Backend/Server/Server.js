@@ -10,6 +10,8 @@
     const Users = require('../Models/Users');
     const Roles = require('../Models/Roles');
     const Square = require('../Models/Square')
+    var square
+    getSquare()
     const Carousel = require('../Models/Carousel')
     const path = require('path');
     const methodOverride = require('method-override');
@@ -21,6 +23,9 @@
     const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
     var topics = questionModule_square.getTopics();
 
+    async function getSquare(){
+        square = await Square.findOne()
+    }
     var startDate_square
     var endDate_square
 
@@ -258,7 +263,10 @@
         res.render(createPath('views/question_carousel'));
     });
     app.get('/question_square', checkAuthenticated, (req, res) => {
-        res.render(createPath('views/question_square'));
+        res.render(createPath('views/question_square'), {topics: square.topics});
+    });
+    app.post('/save_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+        redirect('/admin')
     });
     app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
         successRedirect: '/',
