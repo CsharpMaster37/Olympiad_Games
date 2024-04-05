@@ -243,6 +243,12 @@ app.get('/rating_all', checkAuthenticated, async (req, res) => {
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
     }
 });
+app.get('/question_carousel', checkAuthenticated, (req, res) => {
+    res.render(createPath('views/question_carousel'));
+});
+app.get('/question_square', checkAuthenticated, (req, res) => {
+    res.render(createPath('views/question_square'));
+});
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/signin',
