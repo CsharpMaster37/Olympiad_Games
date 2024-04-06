@@ -10,6 +10,7 @@ const initializePassport = require('./passport-config');
 const Users = require('../Models/Users');
 const Roles = require('../Models/Roles');
 const Square = require('../Models/Square')
+const { Workbook } = require('exceljs');
 var square
 getSquare()
 const Carousel = require('../Models/Carousel')
@@ -184,8 +185,105 @@ app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
         res.status(500).send('Ошибка при загрузке формы редактирования пользователя.');
     }
 });
-app.get('/upload_results_all', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+app.get('/upload_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const users = await Users.find({}, 'username gameProgress.square');
 
+        // Создание новой книги Excel
+        const workbook = new Workbook();
+        const worksheet = workbook.addWorksheet('Square_Rating');
+
+        // Заголовки столбцов
+        const columns = [];
+        columns.push({ header: 'Пользователь', key: 'username', width: 20 });
+        columns.push({ header: 'Сумма', key: 'square_score', width: 15 });
+        for (let i = 1; i <= 25; i++) {
+            columns.push({ header: i, key: `Score${i}`, width: 10 });
+        }
+        worksheet.columns = columns;
+
+        // Запись данных в файл Excel
+        users.forEach(user => {
+            const row = {
+                username: user.username,
+                square_score: user.gameProgress.square.score
+            };
+            for (let i = 1; i <= 25; i++) {
+                row[`Score${i}`] = user.gameProgress.square.values[i - 1] || 0; // Проверяем наличие значения и используем его, иначе 0
+            }
+            worksheet.addRow(row);
+        });
+
+        // Генерация временного имени файла
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0'); // Добавляем ведущий ноль, если число меньше 10
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Добавляем ведущий ноль, если месяц меньше 10
+        const year = now.getFullYear();
+        const formattedDate = `${day}_${month}_${year}`;
+        const fileName = `square_rating_${formattedDate}.xlsx`;
+
+        // Генерация данных Excel в формате база64
+        const excelData = await workbook.xlsx.writeBuffer();
+
+        // Отправка данных Excel в ответе
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        res.send(excelData);
+    } catch (error) {
+        console.error('Error generating Excel:', error);
+        res.status(500).send('Error generating Excel');
+    }
+});
+app.get('/upload_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    try {
+        const users = await Users.find({}, 'username gameProgress.carousel');
+        const data_total_questions = await Carousel.findOne({}, 'total_questions')
+        const total_questions = data_total_questions.total_questions
+        // Создание новой книги Excel
+        const workbook = new Workbook();
+        const worksheet = workbook.addWorksheet('Carousel_Rating');
+
+        // Заголовки столбцов
+        const columns = [];
+        columns.push({ header: 'Пользователь', key: 'username', width: 20 });
+        columns.push({ header: 'Сумма', key: 'carousel_score', width: 15 });
+        for (let i = 1; i <= total_questions; i++) {
+            columns.push({ header: i, key: `Score${i}`, width: 10 });
+        }
+        worksheet.columns = columns;
+
+        // Добавление данных пользователей в таблицу
+        users.forEach(user => {
+            const row = {
+                username: user.username,
+                carousel_score: user.gameProgress.carousel.score
+            };
+
+            for (let i = 1; i <= total_questions; i++) {
+                row[`Score${i}`] = user.gameProgress.carousel.values[i - 1] || 0; // Проверяем наличие значения и используем его, иначе 0
+            }
+            worksheet.addRow(row);
+        });
+
+        // Генерация временного имени файла
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0'); // Добавляем ведущий ноль, если число меньше 10
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Добавляем ведущий ноль, если месяц меньше 10
+        const year = now.getFullYear();
+        const formattedDate = `${day}_${month}_${year}`;
+        const fileName = `carousel_rating_${formattedDate}.xlsx`;
+
+        // Генерация данных Excel в формате база64
+        const excelData = await workbook.xlsx.writeBuffer();
+
+        // Отправка данных Excel в ответе
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        res.send(excelData);
+    } catch (error) {
+        console.error('Error generating Excel:', error);
+        res.status(500).send('Error generating Excel');
+    }
 });
 app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
