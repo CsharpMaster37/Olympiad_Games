@@ -11,7 +11,7 @@
         <main class="main">        
             <div class="col-sm-12">          
                 <div class="wrapper-table">
-                    <form class="form-table" action="/save_square" method="POST"> <!-- Форма для отправки изменений в базу данных -->
+                    <form class="form-table"> <!-- Форма для отправки изменений в базу данных -->
                         <table>
                             <thead>
                               <tr>
@@ -30,7 +30,7 @@
                                           <input type="text" name="topics[<%= topicIndex %>][topic]" value="<%= topic.topic %>">
                                       </td>
                                     <% } %>
-                                    <td><%= question.level %></td>
+                                    <td><input class="input-level" type="number" name="questions[<%= topic.topic %>][<%= question.level %>][level]" value="<%= question.level %>" readonly></td>
                                     <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][question]" value="<%= question.question %>"></td> <!-- Изменяемый вопрос -->
                                     <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][answer]" value="<%= question.answer %>"></td> <!-- Изменяемый ответ -->
                                   </tr>
@@ -46,5 +46,6 @@
         <%- include('com-footer.ejs') %>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/square-questions.js"></script>
 </body>
 </html>

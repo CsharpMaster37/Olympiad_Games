@@ -6,13 +6,12 @@ const MongoStore = require('connect-mongodb-session')(session);
 const passport = require('passport');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const initializePassport = require('./passport-config');
 const Users = require('../Models/Users');
 const Roles = require('../Models/Roles');
 const Square = require('../Models/Square')
 const { Workbook } = require('exceljs');
-var square
-getSquare()
 const Carousel = require('../Models/Carousel')
 const path = require('path');
 const methodOverride = require('method-override');
@@ -22,11 +21,7 @@ const questionModule_carousel = require('./data-carousel');
 const app = express();
 const PORT = 3000;
 const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
-var topics = questionModule_square.getTopics();
 
-async function getSquare() {
-    square = await Square.findOne()
-}
 var startDate_square
 var endDate_square
 
@@ -44,6 +39,7 @@ initializePassport(
     async username => await Users.findOne({ username: username }),
     async id => await Users.findOne({ _id: id })
 );
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -83,8 +79,9 @@ app.use((req, res, next) => {
     res.locals.role = req.user ? req.user.role : null;
     next();
 });
-app.get('/topics_square', (req, res) => {
-    res.json(topics);
+app.get('/topics_square', async(req, res) => {
+    var square = await Square.findOne()
+    res.json(square.topics);
 });
 app.get('/getDataTable_carousel', (req, res) => {
     var questions = questionModule_carousel.questions.map(questions => questions.question);
@@ -100,8 +97,9 @@ app.get('/getDataTable_carousel', (req, res) => {
 app.get('/', (req, res) => {
     res.render(createPath('views/main'));
 });
-app.get('/square', checkAuthenticated, (req, res) => {
-    res.render(createPath('views/square-game'), { topics: topics });
+app.get('/square', checkAuthenticated, async (req, res) => {
+    var square = await Square.findOne()
+    res.render(createPath('views/square-game'), { topics: square.topics });
 });
 app.get('/carousel', checkAuthenticated, (req, res) => {
     res.render(createPath('views/carousel-game'));
@@ -371,23 +369,27 @@ app.get('/get_question_carousel', checkAuthenticated, async (req, res) => {
     const questionsData = await Carousel.findOne({}, 'score_first_question score_failure score_success total_questions questions')
     res.json(questionsData);
 });
-app.get('/question_carousel', checkAuthenticated, async (req, res) => {
+app.get('/question_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     res.render(createPath('views/question_carousel'));
 });
-app.get('/question_square', checkAuthenticated, (req, res) => {
+app.get('/question_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
+    var square = await Square.findOne()
+    console.log(square)
     res.render(createPath('views/question_square'), { topics: square.topics });
 });
 app.post('/save_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
-    res.redirect('/admin')
+    await Square.findOneAndUpdate({topics:req.body.topics})
+    res.redirect('/question_square')
 });
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/signin',
     failureFlash: true
 }));
-app.post('/sendAnswer_Square', (req, res) => {
+app.post('/sendAnswer_Square', async(req, res) => {
     const { rowIndex, cellIndex, inputValue, pointsValue } = req.body
-    var answer = (inputValue == topics[rowIndex - 1].questions[cellIndex - 1].answer)
+    var square = await Square.findOne()
+    var answer = (inputValue == square.topics[rowIndex - 1].questions[cellIndex - 1].answer)
     if (answer) {
         req.user.gameProgress.square.values[(rowIndex - 1) * 5 + (cellIndex - 1)] = pointsValue
         req.user.gameProgress.square.score += pointsValue

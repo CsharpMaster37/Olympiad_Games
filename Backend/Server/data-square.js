@@ -1,25 +1,33 @@
-var _data = require('../Data/Questions_Square.json');
+const Square = require('../Models/Square');
+let _data;
+async function getData() {
+    try {
+        _data = await Square.findOne();
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        process.exit(1); // Exit with non-zero code to indicate failure
+    }
+}
 
-var topics = _data.topics.map(topic => topic.topic);
-// Функция для получения темы по индексу
-/* function getTopics() {
-    return topics
-} */
+async function initializeData() {
+    await getData();
+}
 
-function getTopics() {
-    return _data.topics
+async function getTopics() {
+    await initializeData();
+    return _data.topics;
 }
 
 function getTopicByIndex(index) {
-    if (index >= 0 && index < topics.length) {
-        return topics[index];
+    if (_data && index >= 0 && index < _data.topics.length) {
+        return _data.topics[index];
     } else {
         return null;
     }
 }
 
 function getQuestionByTopicIndexAndLevel(topicIndex, level) {
-    const topicData = _data.topics[topicIndex];
+    const topicData = _data && _data.topics[topicIndex];
     if (topicData) {
         return topicData.questions.find(q => q.level === level);
     } else {
@@ -29,7 +37,7 @@ function getQuestionByTopicIndexAndLevel(topicIndex, level) {
 
 function checkAnswerByTopicIndexAndLevel(topicIndex, level, answer) {
     const question = getQuestionByTopicIndexAndLevel(topicIndex, level);
-    console.log(question)
+    console.log(question);
     if (question) {
         return question.answer === answer;
     } else {
