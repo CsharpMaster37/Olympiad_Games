@@ -79,11 +79,11 @@ app.use((req, res, next) => {
     res.locals.role = req.user ? req.user.role : null;
     next();
 });
-app.get('/topics_square', async(req, res) => {
+app.get('/topics_square', checkAuthenticated, async (req, res) => {
     var square = await Square.findOne()
     res.json(square.topics);
 });
-app.get('/getDataTable_carousel', (req, res) => {
+app.get('/getDataTable_carousel', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
     var questions = questionModule_carousel.questions.map(questions => questions.question);
     res.json({
         total_questions: questionModule_carousel.total_questions,
@@ -355,7 +355,7 @@ app.get('/rating_all', checkAuthenticated, async (req, res) => {
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
     }
 });
-app.post('/save_question_carousel', checkAuthenticated, async (req, res) => {
+app.post('/save_question_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     await Carousel.findOneAndUpdate({
         score_first_question: req.body.score_first_question,
         score_failure: req.body.score_failure,
@@ -365,7 +365,7 @@ app.post('/save_question_carousel', checkAuthenticated, async (req, res) => {
     });
     res.redirect('/question_carousel');
 });
-app.get('/get_question_carousel', checkAuthenticated, async (req, res) => {
+app.get('/get_question_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     const questionsData = await Carousel.findOne({}, 'score_first_question score_failure score_success total_questions questions')
     res.json(questionsData);
 });
@@ -378,7 +378,7 @@ app.get('/question_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res
     res.render(createPath('views/question_square'), { topics: square.topics });
 });
 app.post('/save_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
-    await Square.findOneAndUpdate({topics:req.body.topics})
+    await Square.findOneAndUpdate({ topics: req.body.topics })
     res.redirect('/question_square')
 });
 app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', {
@@ -386,7 +386,7 @@ app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', 
     failureRedirect: '/signin',
     failureFlash: true
 }));
-app.post('/sendAnswer_Square', async(req, res) => {
+app.post('/sendAnswer_Square', checkAuthenticated, async (req, res) => {
     const { rowIndex, cellIndex, inputValue, pointsValue } = req.body
     var square = await Square.findOne()
     var answer = (inputValue == square.topics[rowIndex - 1].questions[cellIndex - 1].answer)
@@ -400,7 +400,7 @@ app.post('/sendAnswer_Square', async(req, res) => {
     req.user.save()
     res.json(answer)
 });
-app.post('/sendAnswer_Carousel', (req, res) => {
+app.post('/sendAnswer_Carousel', checkAuthenticated, (req, res) => {
     const { idxQuestion, answerUser, pointsValue } = req.body
     var answer = answerUser === questionModule_carousel.questions[idxQuestion].answer
     req.user.gameProgress.carousel.values[idxQuestion] = answer ? pointsValue : 0
@@ -414,19 +414,19 @@ app.post('/sendAnswer_Carousel', (req, res) => {
         question: questionModule_carousel.questions[idxQuestion + 1].question
     })
 });
-app.get('/getProgress_square', (req, res) => {
+app.get('/getProgress_square', checkAuthenticated, (req, res) => {
     res.json(req.user.gameProgress.square);
 });
 
 
-app.get('/getTimer_carousel', (req, res) => {
+app.get('/getTimer_carousel', checkAuthenticated, (req, res) => {
     res.json({ startDate: startDate_carousel, endDate: endDate_carousel })
 })
-app.get('/getTimer_square', (req, res) => {
+app.get('/getTimer_square', checkAuthenticated, (req, res) => {
     res.json({ startDate: startDate_square, endDate: endDate_square })
 })
 
-app.post('/setTime_square', async (req, res) => {
+app.post('/setTime_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     startDate_square = req.body.startTimeSquare;
     endDate_square = req.body.endTimeSquare;
     try {
@@ -440,7 +440,7 @@ app.post('/setTime_square', async (req, res) => {
         res.status(500).send('Ошибка при обновлении времени для игры');
     }
 })
-app.post('/setTime_carousel', async (req, res) => {
+app.post('/setTime_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     startDate_carousel = req.body.startTimeCarousel;
     endDate_carousel = req.body.endTimeCarousel;
     try {
@@ -455,7 +455,7 @@ app.post('/setTime_carousel', async (req, res) => {
     }
 })
 
-app.post('/addbonus_square', (req, res) => {
+app.post('/addbonus_square', checkAuthenticated, (req, res) => {
     const { score } = req.body
     req.user.gameProgress.square.score += score
     req.user.save()
@@ -489,7 +489,7 @@ app.post('/signup', async (req, res) => {
         res.status(400).json({ message: 'Signup error' })
     }
 });
-app.delete('/logout', (req, res) => {
+app.delete('/logout', checkAuthenticated, (req, res) => {
     const sessionId = req.sessionID;
     store.destroy(sessionId, (error) => {
         if (error) {
