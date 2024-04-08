@@ -92,7 +92,7 @@ document.getElementById("send-answer").addEventListener("click", async function 
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ rowIndex: rowIndex, cellIndex: cellIndex, inputValue: inputValue, pointsValue: pointsValue })
+        body: JSON.stringify({ rowIndex: rowIndex, cellIndex: cellIndex, inputValue: inputValue.toUpperCase(), pointsValue: pointsValue })
     })
         .then(response => {
             if (!response.ok) {

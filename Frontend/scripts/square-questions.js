@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('.form-table');
 
     if (!form) {
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    form.addEventListener('submit', async function(event) {
+    form.addEventListener('submit', async function (event) {
 
         const formData = {
             topics: []
@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const level = parseInt(levelInput);
                 const question = questionInput;
-                const answer = answerInput;
-                
+                const answer = answerInput.toUpperCase();
+
                 topicObj.questions.push({ level, question, answer });
             }
 
