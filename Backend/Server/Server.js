@@ -17,11 +17,12 @@ const path = require('path');
 const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
 const questionModule_square = require('./data-square');
-const questionModule_carousel = require('./data-carousel');
+/* const questionModule_carousel = require('./data-carousel'); */
 const app = express();
 const PORT = 3000;
 const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
 
+var questionModule_carousel
 var startDate_square
 var endDate_square
 
@@ -101,7 +102,8 @@ app.get('/square', checkAuthenticated, async (req, res) => {
     var square = await Square.findOne()
     res.render(createPath('views/square-game'), { topics: square.topics });
 });
-app.get('/carousel', checkAuthenticated, (req, res) => {
+app.get('/carousel', checkAuthenticated, async (req, res) => {
+    questionModule_carousel = await Carousel.findOne()
     res.render(createPath('views/carousel-game'));
 });
 app.get('/signup', checkAuthenticatedLogAndReg, (req, res) => {
@@ -406,12 +408,22 @@ app.post('/sendAnswer_Carousel', checkAuthenticated, (req, res) => {
     req.user.gameProgress.carousel.values[idxQuestion] = answer ? pointsValue : 0
     req.user.gameProgress.carousel.score += answer ? pointsValue : 0
     req.user.save()
+    if (idxQuestion + 1 < questionModule_carousel.total_questions) {
+        res.json({
+            answer: answer,
+            total_questions: questionModule_carousel.total_questions,
+            score_failure: questionModule_carousel.score_failure,
+            score_success: questionModule_carousel.score_success,
+            question: questionModule_carousel.questions[idxQuestion + 1].question
+        })
+        return
+    }
     res.json({
         answer: answer,
         total_questions: questionModule_carousel.total_questions,
         score_failure: questionModule_carousel.score_failure,
         score_success: questionModule_carousel.score_success,
-        question: questionModule_carousel.questions[idxQuestion + 1].question
+        question: 'Тест закончен'
     })
 });
 app.get('/getProgress_square', checkAuthenticated, (req, res) => {

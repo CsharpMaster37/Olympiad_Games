@@ -98,7 +98,7 @@ sendButton.addEventListener('click', async function (event) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ idxQuestion: idxQuestion, answerUser: inputAnswer.value, pointsValue: score_current_question })
+        body: JSON.stringify({ idxQuestion: idxQuestion, answerUser: inputAnswer.value.toUpperCase(), pointsValue: score_current_question })
     })
         .then(response => {
             if (!response.ok) {

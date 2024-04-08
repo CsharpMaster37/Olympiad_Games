@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         var answerInputs = document.querySelectorAll('[id^=answer_]');
         for (var i = 0; i < questionInputs.length; i++) {
             var question = questionInputs[i].value;
-            var answer = answerInputs[i].value;
+            var answer = answerInputs[i].value.toUpperCase();
             data.questions.push({ question: question, answer: answer });
         }
 
