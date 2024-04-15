@@ -7,16 +7,16 @@ const passport = require('passport');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const initializePassport = require('./passport-config');
-const Users = require('../Models/Users');
-const Roles = require('../Models/Roles');
-const Square = require('../Models/Square')
+const initializePassport = require('./Backend/Server/passport-config');
+const Users = require('./Backend/Models/Users');
+const Roles = require('./Backend/Models/Roles');
+const Square = require('./Backend/Models/Square')
 const { Workbook } = require('exceljs');
-const Carousel = require('../Models/Carousel')
+const Carousel = require('./Backend/Models/Carousel')
 const path = require('path');
 const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
-const questionModule_square = require('./data-square');
+const questionModule_square = require('./Backend/Server/data-square');
 /* const questionModule_carousel = require('./data-carousel'); */
 const app = express();
 const PORT = 3000;
@@ -476,20 +476,20 @@ app.post('/signup', async (req, res) => {
     try {
         const { username, password, confirm_password } = req.body
         if (username == '') {
-            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Введите имя пользователя!' });
+            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите имя пользователя!' });
         }
         if (password == '') {
-            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Введите пароль!' });
+            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите пароль!' });
         }
         if (confirm_password == '') {
-            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Введите повторение пароля!' });
+            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите повторение пароля!' });
         }
         if (password != confirm_password) {
-            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Пароли не совпадают!' });
+            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пароли не совпадают!' });
         }
         const candidate = await Users.findOne({ username })
         if (candidate) {
-            return res.render(path.join(__dirname, '/../../Frontend/views/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
+            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
         }
         const hashPassword = bcrypt.hashSync(password, 7);
         const user = new Users({ username, password: hashPassword, role: 'USER' })
