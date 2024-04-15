@@ -80,10 +80,6 @@ app.use((req, res, next) => {
     res.locals.role = req.user ? req.user.role : null;
     next();
 });
-app.get('/topics_square', checkAuthenticated, async (req, res) => {
-    var square = await Square.findOne()
-    res.json(square.topics);
-});
 app.get('/getDataTable_carousel', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
     var questions = questionModule_carousel.questions.map(questions => questions.question);
     res.json({
@@ -390,14 +386,18 @@ app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', 
 }));
 app.post('/sendAnswer_Square', checkAuthenticated, async (req, res) => {
     const { rowIndex, cellIndex, inputValue, pointsValue } = req.body
+    console.log(rowIndex)
+    console.log(cellIndex)
+    console.log(inputValue)
+    console.log(pointsValue)
     var square = await Square.findOne()
-    var answer = (inputValue == square.topics[rowIndex - 1].questions[cellIndex - 1].answer)
+    var answer = (inputValue == square.topics[rowIndex].questions[cellIndex].answer)
     if (answer) {
-        req.user.gameProgress.square.values[(rowIndex - 1) * 5 + (cellIndex - 1)] = pointsValue
+        req.user.gameProgress.square.values[(rowIndex) * 5 + (cellIndex)] = pointsValue
         req.user.gameProgress.square.score += pointsValue
     }
     else {
-        req.user.gameProgress.square.values[(rowIndex - 1) * 5 + (cellIndex - 1)] = 0
+        req.user.gameProgress.square.values[(rowIndex) * 5 + (cellIndex)] = 0
     }
     req.user.save()
     res.json(answer)

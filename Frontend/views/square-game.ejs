@@ -1,105 +1,70 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <%- include('com-head.ejs') %>
-    <link rel="stylesheet" href="../styles/com-style-info.css"/>
-    <link rel="stylesheet" href="../styles/square-style-game.css"/>
-    <title>Квадрат</title>
-  </head>
-  <body>
-    <div class="wrapper">
-      <%- include('com-header.ejs') %>
+<head>
+  <%- include('com-head.ejs') %>
+  <link rel="stylesheet" href="../styles/com-style-info.css"/>
+  <link rel="stylesheet" href="../styles/square-style-game.css"/>
+  <title>Квадрат</title>
+</head>
+<body>
+<div class="wrapper">
+  <%- include('com-header.ejs') %>
 
-      <main class="main">
-        <div class="load" id="load">Загрузка прогресса</div>
-        <div class="col-sm-2">
-          <div class="Info-window">
-              <div class="wrapper-score">
-                <p>Баллы:</p>
-                <p class="count-value" id="count-point">0</p>
-              </div>
-              <div class="wrapper-time" id="timer">00:00:00</div>  
-          </div>
+  <main class="main">
+    <div class="load" id="load">Загрузка прогресса</div>
+    <div class="col-sm-2">
+      <div class="Info-window">
+        <div class="wrapper-score">
+          <p>Баллы:</p>
+          <p class="count-value" id="count-point">0</p>
         </div>
-        <div class="col-sm-10">
-          <div class="Game">
-            <%- include('./square-modal-window.ejs') %>
-            <div class="gameover" id="gameover">Игра окончена!</div>
-            <table class="Square-table">
-              <thead>
-                <tr>
-                  <th>Тема</th>
-                  <th>Уровень 1</th>
-                  <th>Уровень 2</th>
-                  <th>Уровень 3</th>
-                  <th>Уровень 4</th>
-                  <th>Уровень 5</th>
-                  <th>Бонусы за строку</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><%- topics[0].topic %></td> 
-                  <td><button type="button" class="Question">10 баллов</button></td>
-                  <td><button type="button" class="Question">20 баллов</button></td>
-                  <td><button type="button" class="Question">30 баллов</button></td>
-                  <td><button type="button" class="Question">40 баллов</button></td>
-                  <td><button type="button" class="Question">50 баллов</button></td>
-                  <td class="bonus">30 баллов</td>
-                </tr>
-                <tr>
-                  <td><%- topics[1].topic %></td>
-                  <td><button type="button" class="Question">10 баллов</button></td>
-                  <td><button type="button" class="Question">20 баллов</button></td>
-                  <td><button type="button" class="Question">30 баллов</button></td>
-                  <td><button type="button" class="Question">40 баллов</button></td>
-                  <td><button type="button" class="Question">50 баллов</button></td>
-                  <td class="bonus">30 баллов</td>
-                </tr>
-                <tr>
-                  <td><%- topics[2].topic %></td>
-                  <td><button type="button" class="Question">10 баллов</button></td>
-                  <td><button type="button" class="Question">20 баллов</button></td>
-                  <td><button type="button" class="Question">30 баллов</button></td>
-                  <td><button type="button" class="Question">40 баллов</button></td>
-                  <td><button type="button" class="Question">50 баллов</button></td>
-                  <td class="bonus">30 баллов</td>
-                </tr>
-                <tr>
-                  <td><%- topics[3].topic %></td>
-                  <td><button type="button" class="Question">10 баллов</button></td>
-                  <td><button type="button" class="Question">20 баллов</button></td>
-                  <td><button type="button" class="Question">30 баллов</button></td>
-                  <td><button type="button" class="Question">40 баллов</button></td>
-                  <td><button type="button" class="Question">50 баллов</button></td>
-                  <td class="bonus">30 баллов</td>
-                </tr>
-                <tr>
-                  <td><%- topics[4].topic %></td>
-                  <td><button type="button" class="Question">10 баллов</button></td>
-                  <td><button type="button" class="Question">20 баллов</button></td>
-                  <td><button type="button" class="Question">30 баллов</button></td>
-                  <td><button type="button" class="Question">40 баллов</button></td>
-                  <td><button type="button" class="Question">50 баллов</button></td>
-                  <td class="bonus">30 баллов</td>
-                </tr>
-                <tr>
-                  <td>Бонусы за столбцы</td>
-                  <td class="bonus">30 баллов</td>
-                  <td class="bonus">30 баллов</td>
-                  <td class="bonus">30 баллов</td>
-                  <td class="bonus">30 баллов</td>
-                  <td class="bonus">30 баллов</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
-      <%- include('com-footer.ejs') %>
+        <div class="wrapper-time" id="timer">00:00:00</div>
+      </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script defer src="../scripts/square-timer.js"></script>
-    <script defer src="../scripts/square-modal-window.js"></script>
-  </body>
+    <div class="col-sm-10">
+      <div id="topicsData" style="display: none;">
+        <%= JSON.stringify(topics) %>
+      </div>
+      <div class="Game">
+        <%- include('./square-modal-window.ejs') %>
+        <div class="gameover" id="gameover">Игра окончена!</div>
+        <table class="Square-table">
+          <thead>
+          <tr>
+            <th>Тема</th>
+            <th>Уровень 1</th>
+            <th>Уровень 2</th>
+            <th>Уровень 3</th>
+            <th>Уровень 4</th>
+            <th>Уровень 5</th>
+            <th>Бонусы за строку</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% for(let i = 0; i < topics.length; i++) { %>
+            <tr>
+              <td><%- topics[i].topic %></td>
+              <% for(let j = 0; j < 5; j++) { %>
+                <td><button type="button" class="Question" data-topic-index="<%= i %>" data-level-index="<%= j %>"><%=(j + 1) * 10 %> баллов</button></td>
+              <% } %>
+              <td class="bonus">30 баллов</td>
+            </tr>
+          <% } %>
+          <tr>
+            <td>Бонусы за столбцы</td>
+            <% for(let j = 0; j < 5; j++) { %>
+              <td class="bonus">30 баллов</td>
+            <% } %>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <%- include('com-footer.ejs') %>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../scripts/square-timer.js"></script>
+<script defer src="../scripts/square-modal-window.js"></script>
+</body>
 </html>
