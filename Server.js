@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const passport = require('passport');
@@ -16,13 +15,11 @@ const Carousel = require('./Backend/Models/Carousel')
 const path = require('path');
 const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
-const questionModule_square = require('./Backend/Server/data-square');
-/* const questionModule_carousel = require('./data-carousel'); */
 const app = express();
 const PORT = 3000;
-const MONGOBD_URI = 'mongodb+srv://admin:admin@olympiadcluster.xubd4ua.mongodb.net/OlympiadDB?retryWrites=true&w=majority&appName=OlympiadCluster';
+require('dotenv').config()
 
-var questionModule_carousel
+var questionModule_carousels
 var startDate_square
 var endDate_square
 
@@ -31,7 +28,7 @@ var endDate_carousel
 
 const store = new MongoStore({
     collection: 'Sessions',
-    uri: MONGOBD_URI
+    uri: process.env.MONGOBD_URI
 });
 
 
@@ -57,7 +54,7 @@ app.use(flash());
 app.set('view engine', 'ejs');
 const start = async () => {
     try {
-        await mongoose.connect(MONGOBD_URI);
+        await mongoose.connect(process.env.MONGOBD_URI);
         app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
         const squareData = await Square.findOne({}).exec();
         startDate_square = squareData.startDate;
