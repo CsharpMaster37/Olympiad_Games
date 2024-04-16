@@ -80,7 +80,7 @@ app.use((req, res, next) => {
     res.locals.role = req.user ? req.user.role : null;
     next();
 });
-app.get('/getDataTable_carousel', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
+app.get('/getDataTable_carousel', checkAuthenticated, (req, res) => {
     var questions = questionModule_carousel.questions.map(questions => questions.question);
     res.json({
         total_questions: questionModule_carousel.total_questions,

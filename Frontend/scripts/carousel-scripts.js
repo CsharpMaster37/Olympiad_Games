@@ -44,7 +44,13 @@ function crateTable() {
             labelQuestion.innerHTML = data.questions[0]
             total_score.innerHTML = data.gameProgress.score
             for (var i = 0; i < data.gameProgress.values.length; i++) {
-                labelQuestion.innerHTML = data.questions[i + 1]
+                if (i + 1 < total_questions) {
+                    labelQuestion.innerHTML = data.questions[i + 1]
+                }
+                else {
+                    labelQuestion.innerHTML = 'Тест закончен'
+                }
+
                 if (data.gameProgress.values[i] === 0) {
                     table.rows[i + 1].cells[0].style.backgroundColor = "red"
                     if (i + 1 < total_questions) {
@@ -86,7 +92,6 @@ sendButton.addEventListener('click', async function (event) {
     event.preventDefault(); // Предотвращаем стандартное поведение отправки формы (обновление страницы)    
     if (idxQuestion === total_questions) {
         inputAnswer.value = ''
-        console.log('Тест закончен')
         return
     }
     if (flag) {
