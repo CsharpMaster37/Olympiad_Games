@@ -484,12 +484,12 @@ app.post('/signup', async (req, res) => {
         if (password != confirm_password) {
             return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пароли не совпадают!' });
         }
-        const candidate = await Users.findOne({ username })
+        const candidate = await Users.findOne({ username: username.toUpperCase() })
         if (candidate) {
             return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
         }
         const hashPassword = bcrypt.hashSync(password, 7);
-        const user = new Users({ username, password: hashPassword, role: 'USER' })
+        const user = new Users({ username: username.toUpperCase(), password: hashPassword, role: 'USER' })
         await user.save()
         return res.redirect('/')
     }

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 async function initialize(passport, getUserByUsername, getUserById) {
     const authenticateUsers = async (username, password, done) => {
         try {
-            const user = await getUserByUsername(username);
+            const user = await getUserByUsername(username.toUpperCase());
             if (!user) {
                 return done(null, false, { message: 'Пользователь не найден!' });
             }
@@ -22,7 +22,7 @@ async function initialize(passport, getUserByUsername, getUserById) {
     passport.use(new LocalStrategy({ usernameField: 'username' }, authenticateUsers));
 
     passport.serializeUser((user, done) => {
-        done(null, { id: user._id, username: user.username }); 
+        done(null, { id: user._id, username: user.username });
     });
 
     passport.deserializeUser(async (data, done) => {
