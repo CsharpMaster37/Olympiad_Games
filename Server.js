@@ -369,7 +369,6 @@ app.get('/question_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, r
 });
 app.get('/question_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     var square = await Square.findOne()
-    console.log(square)
     res.render(createPath('views/question_square'), { topics: square.topics });
 });
 app.post('/save_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {

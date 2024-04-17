@@ -6,12 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    form.addEventListener('submit', async function (event) {
+    const submitButton = document.querySelector('button[type="button"]');
 
+    if (!submitButton) {
+        console.error('Submit button not found');
+        return;
+    }
+
+    submitButton.addEventListener('click', async function (event) {
         const formData = {
             topics: []
         };
-
         const rows = form.querySelectorAll('tbody tr');
 
         for (let i = 0; i < rows.length; i += 5) { // Шагаем по каждой теме (каждые 5 строк)
@@ -45,13 +50,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            await fetch('/save_square', {
+            const response = await fetch('/save_square', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
+
+            if (response.redirected) {
+                // Если произошло перенаправление, перезагрузим страницу
+                window.location.href = response.url;
+            }
         } catch (error) {
             console.error('Error sending data to server:', error);
         }
