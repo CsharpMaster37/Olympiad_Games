@@ -382,10 +382,6 @@ app.post('/signin', checkAuthenticatedLogAndReg, passport.authenticate('local', 
 }));
 app.post('/sendAnswer_Square', checkAuthenticated, async (req, res) => {
     const { rowIndex, cellIndex, inputValue, pointsValue } = req.body
-    console.log(rowIndex)
-    console.log(cellIndex)
-    console.log(inputValue)
-    console.log(pointsValue)
     var square = await Square.findOne()
     var answer = (inputValue == square.topics[rowIndex].questions[cellIndex].answer)
     if (answer) {
@@ -470,7 +466,7 @@ app.post('/addbonus_square', checkAuthenticated, (req, res) => {
 })
 app.post('/signup', async (req, res) => {
     try {
-        const { username, password, confirm_password } = req.body
+        const { username, password, confirm_password } = req.body;
         if (username == '') {
             return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите имя пользователя!' });
         }
@@ -483,20 +479,30 @@ app.post('/signup', async (req, res) => {
         if (password != confirm_password) {
             return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пароли не совпадают!' });
         }
-        const candidate = await Users.findOne({ username: username.toUpperCase() })
+        const candidate = await Users.findOne({ username: username.toUpperCase() });
         if (candidate) {
             return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
         }
         const hashPassword = bcrypt.hashSync(password, 7);
-        const user = new Users({ username: username.toUpperCase(), password: hashPassword, role: 'USER' })
-        await user.save()
-        return res.redirect('/')
+        const user = new Users({ username: username.toUpperCase(), password: hashPassword, role: 'USER' });
+        await user.save();
+
+        // Авторизация пользователя после успешной регистрации
+        req.login(user, function(err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ message: 'Ошибка авторизации после регистрации' });
+            }
+            // Перенаправление на главную страницу или куда вам нужно
+            return res.redirect('/');
+        });
     }
     catch (e) {
-        console.log(e)
-        res.status(400).json({ message: 'Signup error' })
+        console.log(e);
+        res.status(400).json({ message: 'Ошибка регистрации' });
     }
 });
+
 app.delete('/logout', checkAuthenticated, (req, res) => {
     const sessionId = req.sessionID;
     store.destroy(sessionId, (error) => {
