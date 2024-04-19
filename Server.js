@@ -19,7 +19,6 @@ const app = express();
 const PORT = 3000;
 require('dotenv').config()
 
-var questionModule_carousels
 var startDate_square
 var endDate_square
 
@@ -77,7 +76,8 @@ app.use((req, res, next) => {
     res.locals.role = req.user ? req.user.role : null;
     next();
 });
-app.get('/getDataTable_carousel', checkAuthenticated, (req, res) => {
+app.get('/getDataTable_carousel', checkAuthenticated, async (req, res) => {
+    const questionModule_carousel = await Carousel.findOne()
     var questions = questionModule_carousel.questions.map(questions => questions.question);
     res.json({
         total_questions: questionModule_carousel.total_questions,
@@ -96,7 +96,6 @@ app.get('/square', checkAuthenticated, async (req, res) => {
     res.render(createPath('views/square-game'), { topics: square.topics });
 });
 app.get('/carousel', checkAuthenticated, async (req, res) => {
-    questionModule_carousel = await Carousel.findOne()
     res.render(createPath('views/carousel-game'));
 });
 app.get('/signup', checkAuthenticatedLogAndReg, (req, res) => {
@@ -323,6 +322,7 @@ app.get('/rating_square', checkAuthenticated, async (req, res) => {
 });
 app.get('/rating_carousel', checkAuthenticated, async (req, res) => {
     try {
+        const questionModule_carousel = await Carousel.findOne()
         const users = await Users.find({}, 'username gameProgress.carousel'); // Находим всех пользователей и выбираем только их имена и прогресс игр
         const progress = users.map(user => ({ username: user.username, carouselProgress: user.gameProgress.carousel })); // Формируем массив объектов с именем пользователя и их прогрессом       
         // Сортировка по carouselProgressScore в порядке убывания
@@ -394,7 +394,8 @@ app.post('/sendAnswer_Square', checkAuthenticated, async (req, res) => {
     req.user.save()
     res.json(answer)
 });
-app.post('/sendAnswer_Carousel', checkAuthenticated, (req, res) => {
+app.post('/sendAnswer_Carousel', checkAuthenticated, async (req, res) => {
+    const questionModule_carousel = await Carousel.findOne()
     const { idxQuestion, answerUser, pointsValue } = req.body
     var answer = answerUser === questionModule_carousel.questions[idxQuestion].answer
     req.user.gameProgress.carousel.values[idxQuestion] = answer ? pointsValue : 0
@@ -488,7 +489,7 @@ app.post('/signup', async (req, res) => {
         await user.save();
 
         // Авторизация пользователя после успешной регистрации
-        req.login(user, function(err) {
+        req.login(user, function (err) {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ message: 'Ошибка авторизации после регистрации' });
