@@ -14,8 +14,8 @@ function CountQuestions() {
         var row = document.createElement('tr');
         row.innerHTML = `
             <td>${i}</td>
-            <td><input type="text" id="question_${i}" value="${questions[i - 1].question}" required ></td>
-            <td><input type="text" id="answer_${i}" value="${questions[i - 1].answer}" required ></td>
+            <td><input type="text" id="question_${i}" value="${questions[i - 1].question}"></td>
+            <td><input type="text" id="answer_${i}" value="${questions[i - 1].answer}"></td>
         `;
         questionsBody.appendChild(row);
     }
@@ -25,8 +25,8 @@ function CountQuestions() {
         var row = document.createElement('tr');
         row.innerHTML = `
             <td>${i}</td>
-            <td><input type="text" id="question_${i}" value="" required ></td>
-            <td><input type="text" id="answer_${i}" value="" required ></td>
+            <td><input type="text" id="question_${i}" value=""></td>
+            <td><input type="text" id="answer_${i}" value=""></td>
         `;
         questionsBody.appendChild(row);
     }
@@ -53,8 +53,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     total_questions_input.value = total_questions;
     CountQuestions()
 
+    const submitButton = document.querySelector('button[type="button"]');
+    if (!submitButton) {
+        console.error('Submit button not found');
+        return;
+    }
     // Обработчик отправки формы
-    document.getElementById('question-form').addEventListener('submit', function (event) {
+    submitButton.addEventListener('click', async function (event) {
 
         // Создаем объект, содержащий данные
         var data = {
@@ -75,15 +80,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Отправляем POST-запрос на сервер
-        fetch('/save_question_carousel', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .catch(error => {
-                console.error('Error:', error);
+        try {
+            const response = await fetch('/save_question_carousel', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+            if (response.redirected) {
+                // Если произошло перенаправление, перезагрузим страницу
+                window.location.href = response.url;
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
     });
 });
