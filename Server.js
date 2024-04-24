@@ -300,7 +300,7 @@ app.post('/admin/add', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => 
             return res.status(400).send('Пользователь с таким именем уже существует');
         }
         const hashedPassword = await bcrypt.hash(password, 7);
-        const newUser = new Users({ username, password: hashedPassword, role: 'USER' });
+        const newUser = new Users({ username: username.toUpperCase(), password: hashedPassword, role: 'USER' });
         await newUser.save();
         res.redirect('/admin');
     } catch (err) {
