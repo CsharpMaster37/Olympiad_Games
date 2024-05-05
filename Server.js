@@ -282,7 +282,7 @@ app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, r
         const userId = req.params.id;
         const { username, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 7);
-        await Users.findByIdAndUpdate(userId, { username: username, password: hashedPassword });
+        await Users.findByIdAndUpdate(userId, { username: username.toUpperCase(), password: hashedPassword });
         res.redirect('/admin');
     } catch (err) {
         console.error('Ошибка при сохранении изменений пользователя:', err);
