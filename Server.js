@@ -89,25 +89,25 @@ app.get('/getDataTable_carousel', checkAuthenticated, async (req, res) => {
     });
 });
 app.get('/', (req, res) => {
-    res.render(createPath('views/main'));
+    res.render(createPath('views/index'), { viewName: 'main' });
 });
 app.get('/square', checkAuthenticated, async (req, res) => {
     var square = await Square.findOne()
-    res.render(createPath('views/square-game'), { topics: square.topics });
+    res.render(createPath('views/index'), { viewName: 'square-game', topics: square.topics });
 });
 app.get('/carousel', checkAuthenticated, async (req, res) => {
-    res.render(createPath('views/carousel-game'));
+    res.render(createPath('views/index'), { viewName: 'carousel-game' });
 });
 app.get('/signup', checkAuthenticatedLogAndReg, (req, res) => {
-    res.render(createPath('views/registration'), { error_message: null });
+    res.render(createPath('views/index'), { viewName: 'registration', error_message: null });
 });
 app.get('/signin', checkAuthenticatedLogAndReg, (req, res) => {
-    res.render(createPath('views/login'), { error_message: null });
+    res.render(createPath('views/index'), { viewName: 'login', error_message: null });
 });
 app.get('/admin', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const users = await Users.find({}, 'username role');
-        res.render(createPath('views/admin'), { users: users });
+        res.render(createPath('views/index'), { viewName: 'admin', users: users });
     } catch (err) {
         console.error('Ошибка при получении списка пользователей:', err);
         res.status(500).send('Ошибка при загрузке пользователей.');
@@ -171,7 +171,7 @@ app.get('/:id/edit', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
         const userId = req.params.id;
         const user = await Users.findById(userId);
-        res.render(createPath('views/admin_edit_user'), { user: user });
+        res.render(createPath('views/index'), { viewName: 'admin_edit_user', user: user });
     } catch (err) {
         console.error('Ошибка при загрузке формы редактирования пользователя:', err);
         res.status(500).send('Ошибка при загрузке формы редактирования пользователя.');
@@ -290,7 +290,7 @@ app.post('/admin/:id/update', checkAuthenticatedLogAndRegAndAdmin, async (req, r
     }
 });
 app.get('/admin/add', checkAuthenticatedLogAndRegAndAdmin, (req, res) => {
-    res.render(createPath('views/admin_add_user'));
+    res.render(createPath('views/index'), { viewName: 'admin_add_user' });
 });
 app.post('/admin/add', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     try {
@@ -314,7 +314,7 @@ app.get('/rating_square', checkAuthenticated, async (req, res) => {
         const progress = users.map(user => ({ username: user.username, squareProgress: user.gameProgress.square }));
         // Сортировка по squareProgress в порядке убывания
         progress.sort((a, b) => b.squareProgress.score - a.squareProgress.score);
-        res.render(createPath('views/rating_square'), { progress: progress, href: 'rating_square' });
+        res.render(createPath('views/index'), { viewName: 'rating_square', progress: progress, href: 'rating_square' });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
@@ -327,7 +327,7 @@ app.get('/rating_carousel', checkAuthenticated, async (req, res) => {
         const progress = users.map(user => ({ username: user.username, carouselProgress: user.gameProgress.carousel })); // Формируем массив объектов с именем пользователя и их прогрессом       
         // Сортировка по carouselProgressScore в порядке убывания
         progress.sort((a, b) => b.carouselProgress.score - a.carouselProgress.score);
-        res.render(createPath('views/rating_carousel'), { progress: progress, href: 'rating_carousel', count: questionModule_carousel.total_questions });
+        res.render(createPath('views/index'), { viewName: 'rating_carousel', progress: progress, href: 'rating_carousel', count: questionModule_carousel.total_questions });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
@@ -344,7 +344,7 @@ app.get('/rating_all', checkAuthenticated, async (req, res) => {
         })); // Формируем массив объектов с именем пользователя и их прогрессом      
         // Сортировка по totalProgressScore в порядке убывания
         progress.sort((a, b) => b.totalProgressScore - a.totalProgressScore);
-        res.render(createPath('views/rating_all'), { progress: progress, href: 'rating_all' });
+        res.render(createPath('views/index'), { viewName: 'rating_all', progress: progress, href: 'rating_all' });
     } catch (err) {
         console.error('Ошибка при получении прогресса квадрата для всех пользователей:', err);
         res.status(500).send('Ошибка при получении прогресса квадрата для всех пользователей.');
@@ -365,11 +365,11 @@ app.get('/get_question_carousel', checkAuthenticatedLogAndRegAndAdmin, async (re
     res.json(questionsData);
 });
 app.get('/question_carousel', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
-    res.render(createPath('views/question_carousel'));
+    res.render(createPath('views/index'), { viewName: 'question_carousel' });
 });
 app.get('/question_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     var square = await Square.findOne()
-    res.render(createPath('views/question_square'), { topics: square.topics });
+    res.render(createPath('views/index'), { viewName: 'question_square', topics: square.topics });
 });
 app.post('/save_square', checkAuthenticatedLogAndRegAndAdmin, async (req, res) => {
     await Square.findOneAndUpdate({ topics: req.body.topics })
@@ -469,20 +469,20 @@ app.post('/signup', async (req, res) => {
     try {
         const { username, password, confirm_password } = req.body;
         if (username == '') {
-            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите имя пользователя!' });
+            return res.render(createPath('views/index'), { viewName: 'registration', error_message: 'Введите имя пользователя!' });
         }
         if (password == '') {
-            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите пароль!' });
+            return res.render(createPath('views/index'), { viewName: 'registration', error_message: 'Введите пароль!' });
         }
         if (confirm_password == '') {
-            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Введите повторение пароля!' });
+            return res.render(createPath('views/index'), { viewName: 'registration', error_message: 'Введите повторение пароля!' });
         }
         if (password != confirm_password) {
-            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пароли не совпадают!' });
+            return res.render(createPath('views/index'), { viewName: 'registration', error_message: 'Пароли не совпадают!' });
         }
         const candidate = await Users.findOne({ username: username.toUpperCase() });
         if (candidate) {
-            return res.render(path.join(__dirname, 'Frontend/views/registration'), { error_message: 'Пользователь с таким именем уже существует!' });
+            return res.render(createPath('views/index'), { viewName: 'registration', error_message: 'Пользователь с таким именем уже существует!' });
         }
         const hashPassword = bcrypt.hashSync(password, 7);
         const user = new Users({ username: username.toUpperCase(), password: hashPassword, role: 'USER' });

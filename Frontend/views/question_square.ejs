@@ -1,51 +1,33 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <%- include('com-head.ejs') %>
-    <link rel="stylesheet" href="../styles/admin-square-questions.css">
-    <title>Вопросы квадрата</title>
-</head>
-<body>
-    <div class="wrapper">
-        <%- include('com-header.ejs') %>
-        <main class="main">        
-            <div class="col-sm-12">          
-                <div class="wrapper-table">
-                    <div class="form-table">
-                        <table>
-                            <thead>
-                              <tr>
-                                <th>Тема</th>
-                                <th>Уровень</th>
-                                <th>Вопрос</th>
-                                <th>Ответ</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <% topics.forEach(function(topic, topicIndex) { %>
-                                <% topic.questions.forEach(function(question, index) { %>
-                                  <tr>
-                                    <% if (index === 0) { %>
-                                      <td rowspan="<%= topic.questions.length %>">
-                                          <input type="text" name="topics[<%= topicIndex %>][topic]" value="<%= topic.topic %>">
-                                      </td>
-                                    <% } %>
-                                    <td><input class="input-level" type="number" name="questions[<%= topic.topic %>][<%= question.level %>][level]" value="<%= question.level %>" readonly></td>
-                                    <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][question]" value="<%= question.question %>"></td> <!-- Изменяемый вопрос -->
-                                    <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][answer]" value="<%= question.answer %>"></td> <!-- Изменяемый ответ -->
-                                  </tr>
-                                <% }); %>
-                              <% }); %>
-                            </tbody>
-                          </table>
-                          <button type="button">Сохранить</button> <!-- Кнопка для отправки изменений -->
-                      </div>
-                </div>
-            </div>
-        </main>
-        <%- include('com-footer.ejs') %>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../scripts/square-questions.js"></script>
-</body>
-</html>
+<div class="col-sm-12">          
+  <div class="wrapper-table">
+      <div class="form-table">
+          <table>
+              <thead>
+                <tr>
+                  <th>Тема</th>
+                  <th>Уровень</th>
+                  <th>Вопрос</th>
+                  <th>Ответ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% topics.forEach(function(topic, topicIndex) { %>
+                  <% topic.questions.forEach(function(question, index) { %>
+                    <tr>
+                      <% if (index === 0) { %>
+                        <td rowspan="<%= topic.questions.length %>">
+                            <input type="text" name="topics[<%= topicIndex %>][topic]" value="<%= topic.topic %>">
+                        </td>
+                      <% } %>
+                      <td><input class="input-level" type="number" name="questions[<%= topic.topic %>][<%= question.level %>][level]" value="<%= question.level %>" readonly></td>
+                      <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][question]" value="<%= question.question %>"></td> <!-- Изменяемый вопрос -->
+                      <td><input type="text" name="questions[<%= topic.topic %>][<%= question.level %>][answer]" value="<%= question.answer %>"></td> <!-- Изменяемый ответ -->
+                    </tr>
+                  <% }); %>
+                <% }); %>
+              </tbody>
+            </table>
+            <button type="button">Сохранить</button> <!-- Кнопка для отправки изменений -->
+        </div>
+  </div>
+</div>
