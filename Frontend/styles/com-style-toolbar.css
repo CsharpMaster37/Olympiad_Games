@@ -54,7 +54,8 @@
 }
 
 .header{
-    background-color: #ffffff;
+    background: rgb(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
 }
 
 .wrapper{
