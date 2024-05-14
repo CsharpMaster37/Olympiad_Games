@@ -59,4 +59,59 @@
         </div>
         </div>
     </div>
+    <!-- <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white box-shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Олимп</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="button-toolbar font-toolbar" href='/' role="button">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="button-toolbar font-toolbar" href="/square" role="button">Квадрат</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="button-toolbar font-toolbar" href="/carousel" role="button" >Карусель</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="button-toolbar font-toolbar" href='/rating_all' role="button">Рейтинг</a>
+                    </li>
+                    <% if (isAuthenticated && role == "ADMIN") { %>
+                        <li class="nav-item">
+                            <a class="button-toolbar font-toolbar" href='/admin' role="button">Админ</a>
+                        </li>
+                    <% } %>
+                    <li class="nav-item dropdown">
+                        <a
+                        class="button-toolbar"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <% if (isAuthenticated) { %>
+                            <%= username %>
+                        <% } else { %>
+                            Профиль
+                        <% } %>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <% if (isAuthenticated) { %>
+                                <li>
+                                    <form action="/logout?_method=DELETE" method="POST">
+                                        <button class="dropdown-item" type="submit">Выйти</button>
+                                    </form>
+                                </li>
+                            <% } else { %>
+                                <li><a class="dropdown-item" href="/signin">Войти</a></li>
+                                <li><a class="dropdown-item" href="/signup">Зарегистрироваться</a></li>
+                            <% } %>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> -->
 </header>
