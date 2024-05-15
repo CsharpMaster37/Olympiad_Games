@@ -1,18 +1,31 @@
-@media screen and (max-width: 875px) {
-    .Square-table td{
+@media (min-width: 100px) {
+    .Square-table{
+        font-size: 8px;
+    }
+    .Question{
+        height: 70px;
+    }
+}
+@media (min-width: 992px) {
+    .Square-table{
         font-size: 10px;
     }
-  }
-  @media screen and (min-width: 876px) {
-    .Square-table td{
+    .Question{
+        height: 100px;
+    }
+}
+@media (min-width: 1200px) {
+    .Square-table{
         font-size: 15px;
     }
-  }
+    .Question{
+        height: 140px;
+    }   
+}
 
 .Square-table {
     color: #000000;
-    width: 90%;
-    height: 90%;
+    width: 80%;
     margin: auto;
     border-collapse: separate;
     border-spacing: 5px;
@@ -27,21 +40,21 @@
     border-radius: 10px;
     box-shadow: 0 2px darkslategray;
 }   
-.Square-table td{
-    height: 20%;
+
+main{
+    flex-direction: column;
 }
+
 
 
 .Question{
     width: 100%;
-    height: 100%;
     color: #301f2d;
     background-color: #fce8f8;
     border-radius: 10px;
     box-shadow: 0 2px 4px darkslategray;
     transition: .5s;
     font-weight: 500;
-    font-size: 17px;
 }
 
 
@@ -51,11 +64,10 @@
     color: rgb(44, 6, 6);
 }
 
-.Game{
-    height: 100%;
-    width: 100%;
+.Game{ 
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    min-width: 500px;
 }

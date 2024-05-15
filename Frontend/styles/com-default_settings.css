@@ -1,36 +1,38 @@
 html, body{
     height: 100%;
     min-height: 100vh;
-}
-
-.wrapper{
-    display: flex;
     width: 100%;
-}
-
-body{
-    min-width: 320px;
-    font-family: 'Roboto', sans-serif;
-    min-height: 100vh;
-    min-width: 100vh;
-}
-
-main {
+    position: relative;
     background: url('1.jpg') no-repeat;
     background-size: cover;
     background-position: center;
     box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.min-width-elements{
+    min-width: 1050px;
+}
+
+
+body{
+    font-family: 'Roboto', sans-serif; 
+}
+
+main {    
     display: flex;
-    position: static;
+    position: relative;
     width: 100%;
     height: auto;
     box-shadow: 
         inset 0px 11px 15px -12px #000000,
         inset 0px -11px 15px -12px #000000; 
-    flex: 1 1 auto;
+    overflow: auto; 
 }
+
 
 .footer{
     color: #000000;
     background-color:#1887b7;
+    margin-top: auto;
 }
