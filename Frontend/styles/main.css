@@ -1,0 +1,5 @@
+.container-rules{
+    position: relative;
+    background-color: beige;
+    flex: 1 1 auto;
+}
