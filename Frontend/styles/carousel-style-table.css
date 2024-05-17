@@ -43,7 +43,6 @@ main{
 .wrapper-progress-table {
     width: 20%;
     margin: 2%;
-    height: 75.5vh;
     justify-self: center;
     align-self: center;
     overflow: auto;
