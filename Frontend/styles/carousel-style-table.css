@@ -43,7 +43,7 @@ main{
 .wrapper-progress-table {
     width: 20%;
     margin: 2%;
-    height: 555px;
+    height: 75.5vh;
     justify-self: center;
     align-self: center;
     overflow: auto;
@@ -109,7 +109,7 @@ main{
 }
 
 div::-webkit-scrollbar {
-    width: 1px; /* Ширина полосы прокрутки */
+    width: 4px; /* Ширина полосы прокрутки */
 }
 
 /* Стилизация ползунка */

@@ -132,9 +132,23 @@ sendButton.addEventListener('click', async function (event) {
             }
             labelQuestion.innerHTML = data.question
             incIdxQuestion()
+            // Прокрутка таблицы
+            scrollToRow(idxQuestion + 1);
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
     flag = false
 })
+// Функция для прокрутки к текущей строке
+function scrollToRow(rowIdx) {
+    const table = document.getElementById('progress-table');
+    const row = table.rows[rowIdx];
+    const wrapper = document.querySelector('.wrapper-progress-table');
+    const rowTop = row.offsetTop;
+    const rowHeight = row.clientHeight;
+    const wrapperHeight = wrapper.clientHeight;
+
+    // Прокручиваем так, чтобы текущая строка была в центре контейнера
+    wrapper.scrollTop = rowTop - (wrapperHeight / 2) + (rowHeight / 2);
+}
