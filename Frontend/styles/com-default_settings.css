@@ -13,14 +13,13 @@ html, body{
     min-width: 1050px;
 }
 
-
 body{
     font-family: 'Roboto', sans-serif; 
 }
 
 main {    
     display: flex;
-    position: relative;
+    position: static;
     width: 100%;
     height: auto;
     box-shadow: 
